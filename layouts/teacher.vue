@@ -1,0 +1,349 @@
+<template>
+  <div
+    class="h-screen lg:max-h-[50rem] mx-auto w-full overflow-hidden flex relative"
+  >
+    <!-- sidebar section-desktop-display -->
+
+    <div
+      class="sm:h-[100vh] h-full sm:w-[23%] lg:w-[19%] bg-[#F7F7F7] items-center justify-start hidden sm:flex px-3 flex-col"
+    >
+      <div
+        class="w-full flex items-center justify-center border border-grey-200 bg-white mb-7 gap-x-2 rounded-md h-[100px]"
+      >
+        <img
+          src="~/assets/img/logo-eduaize.png"
+          class="w-[21rem] max-w-none me-auto"
+        />
+      </div>
+      <div
+        class="h-full rounded-2xl sm:w-[100%] md:w-full flex flex-col items-center justify-start lg:py-4 gap-y-5 mt-8"
+      >
+        <NuxtLink href="/teacher" class="w-full flex items-center gap-x-3 px-4">
+          <img
+            v-if="$route.path == '/teacher'"
+            src="~/assets/img/dashboard.svg"
+            class="w-5"
+          />
+          <img v-else src="~/assets/img/dashboard2.svg" class="w-5" />
+          <span
+            :class="[
+              $route.path == '/teacher' ? 'text-[#0050A8]' : 'text-[#737373]',
+            ]"
+            class="Grotesque-Light text-xs sm:text-[14px]"
+          >
+            Dashboard
+          </span>
+        </NuxtLink>
+
+        <NuxtLink
+          href="/teacher/grades"
+          class="w-full flex items-center gap-x-3 px-4"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5"
+            :class="[
+              $route.path == '/teacher/grades'
+                ? 'text-[#0050A8]'
+                : 'text-[#737373]',
+            ]"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M12 16v-8m0 0-3 3m3-3 3 3M4.5 15.75V6a2.25 2.25 0 012.25-2.25h10.5A2.25 2.25 0 0119.5 6v9.75m-15 0h15m-15 0A2.25 2.25 0 006.75 18h10.5a2.25 2.25 0 002.25-2.25"
+            />
+          </svg>
+
+          <span
+            :class="[
+              $route.path == '/notifications'
+                ? 'text-[#0050A8]'
+                : 'text-[#737373]',
+            ]"
+            class="Grotesque-Light text-xs sm:text-[14px]"
+          >
+            Grades Upload
+          </span>
+        </NuxtLink>
+        <NuxtLink
+          href="/teacher/student-performance"
+          class="w-full flex items-center gap-x-3 px-4"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5"
+            :class="[
+              $route.path == '/teacher/student-performance'
+                ? 'text-[#0050A8]'
+                : 'text-[#737373]',
+            ]"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3 18v-6a3 3 0 013-3h12a3 3 0 013 3v6m-3-3a3 3 0 11-6 0 3 3 0 116 0zm-7-6V5a1 1 0 011-1h2a1 1 0 011 1v4"
+            />
+          </svg>
+
+          <span
+            :class="[
+              $route.path == '/teacher/student-performance'
+                ? 'text-[#0050A8]'
+                : 'text-[#737373]',
+            ]"
+            class="Grotesque-Light text-xs sm:text-[14px]"
+          >
+            Student performance
+          </span>
+        </NuxtLink>
+        <NuxtLink
+          href="/teacher/chats"
+          class="w-full flex items-center gap-x-3 px-4"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5"
+            :class="[
+              $route.path == '/teacher/chats'
+                ? 'text-[#0050A8]'
+                : 'text-[#737373]',
+            ]"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M8.25 8.25h7.5m-7.5 3h4.5M12 21l-3-3H4.5A2.25 2.25 0 012.25 15V5.25A2.25 2.25 0 014.5 3h15A2.25 2.25 0 0121.75 5.25V15a2.25 2.25 0 01-2.25 2.25H12z"
+            />
+          </svg>
+          <span
+            :class="[
+              $route.path == '/notifications'
+                ? 'text-[#0050A8]'
+                : 'text-[#737373]',
+            ]"
+            class="Grotesque-Light text-xs sm:text-[14px]"
+          >
+            Chats
+          </span>
+        </NuxtLink>
+        <NuxtLink
+          href="/teacher/notifications"
+          class="w-full flex items-center gap-x-3 px-4"
+        >
+          <img
+            v-if="$route.path == '/notifications'"
+            src="~/assets/img/bell.svg"
+            class="w-5"
+          />
+          <img v-else src="~/assets/img/bell2.svg" class="w-5" />
+          <span
+            :class="[
+              $route.path == '/notifications'
+                ? 'text-[#0050A8]'
+                : 'text-[#737373]',
+            ]"
+            class="Grotesque-Light text-xs sm:text-[14px]"
+          >
+            Notifications
+          </span>
+        </NuxtLink>
+
+        <NuxtLink to="/">
+          <div class="w-full flex items-center gap-x-3 px-4 mt-40">
+            <img src="~/assets/img/logout.svg" class="w-5" />
+            <span class="Grotesque-Light text-[#737373] text-xs sm:text-[14px]">
+              Logout
+            </span>
+          </div>
+        </NuxtLink>
+      </div>
+    </div>
+
+    <!-- sidebar section -->
+
+    <!-- sidebar section-mobile-display -->
+
+    <div
+      class="w-full right-0 left-0 sm:hidden fixed bottom-0 h-[70px] bg-[#F7F7F7] flex justify-around items-center py-3"
+    >
+      <NuxtLink
+        href="/teacher"
+        class="w-full flex items-center flex-col gap-y-0 px-4 router-link-disable"
+      >
+        <img
+          v-if="$route.path == '/teacher'"
+          src="~/assets/img/dashboard.svg"
+          class="w-[29px]"
+        />
+        <img v-else src="~/assets/img/dashboard2.svg" class="w-[28px]" />
+        <span
+          :class="[
+            $route.path == '/teacher' ? 'text-[#0050A8]' : 'text-[#737373]',
+          ]"
+          class="Grotesque-Light text-xs sm:text-[12px]"
+        >
+          Dashboard
+        </span>
+      </NuxtLink>
+
+      <NuxtLink
+        href="/teacher/grades"
+        class="w-full flex items-center gap-x-0 flex-col router-link-disable px-4"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-[29px]"
+          :class="[
+            $route.path == '/teacher/grades'
+              ? 'text-[#0050A8]'
+              : 'text-[#737373]',
+          ]"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M12 16v-8m0 0-3 3m3-3 3 3M4.5 15.75V6a2.25 2.25 0 012.25-2.25h10.5A2.25 2.25 0 0119.5 6v9.75m-15 0h15m-15 0A2.25 2.25 0 006.75 18h10.5a2.25 2.25 0 002.25-2.25"
+          />
+        </svg>
+
+        <span
+          :class="[
+            $route.path == '/teacher/grades'
+              ? 'text-[#0050A8]'
+              : 'text-[#737373]',
+          ]"
+          class="Grotesque-Light text-xs sm:text-[12px]"
+        >
+          Upload
+        </span>
+      </NuxtLink>
+      <NuxtLink
+        href="/teacher/student-performance"
+        class="w-full flex items-center flex-col router-link-disable px-4"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-[29px]"
+          :class="[
+            $route.path == '/teacher/student-performance'
+              ? 'text-[#0050A8]'
+              : 'text-[#737373]',
+          ]"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3 18v-6a3 3 0 013-3h12a3 3 0 013 3v6m-3-3a3 3 0 11-6 0 3 3 0 116 0zm-7-6V5a1 1 0 011-1h2a1 1 0 011 1v4"
+          />
+        </svg>
+
+        <span
+          :class="[
+            $route.path == '/teacher/student-performance'
+              ? 'text-[#0050A8]'
+              : 'text-[#737373]',
+          ]"
+          class="Grotesque-Light text-xs sm:text-[12px]"
+        >
+          performance
+        </span>
+      </NuxtLink>
+      <NuxtLink
+        href="/teacher/chats"
+        class="w-full flex items-center gap-x-0 flex-col router-link-disable px-4"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-[29px]"
+          :class="[
+            $route.path == '/teacher/chats'
+              ? 'text-[#0050A8]'
+              : 'text-[#737373]',
+          ]"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M8.25 8.25h7.5m-7.5 3h4.5M12 21l-3-3H4.5A2.25 2.25 0 012.25 15V5.25A2.25 2.25 0 014.5 3h15A2.25 2.25 0 0121.75 5.25V15a2.25 2.25 0 01-2.25 2.25H12z"
+          />
+        </svg>
+        <span
+          :class="[
+            $route.path == '/teacher/chats'
+              ? 'text-[#0050A8]'
+              : 'text-[#737373]',
+          ]"
+          class="Grotesque-Light text-xs sm:text-[12px]"
+        >
+          Chats
+        </span>
+      </NuxtLink>
+      <NuxtLink
+        href="/teacher/notifications"
+        class="w-full flex items-center gap-x-0 flex-col router-link-disable px-4"
+      >
+        <img
+          v-if="$route.path == '/teacher/notifications'"
+          src="~/assets/img/bell.svg"
+          class="w-[29px]"
+        />
+        <img v-else src="~/assets/img/bell2.svg" class="w-[29px]" />
+        <span
+          :class="[
+            $route.path == '/teacher/notifications'
+              ? 'text-[#0050A8]'
+              : 'text-[#737373]',
+          ]"
+          class="Grotesque-Light text-xs sm:text-[12px]"
+        >
+          Info
+        </span>
+      </NuxtLink>
+    </div>
+
+    <!-- sidebar section-mobile-display -->
+
+    <section
+      class="h-full bg-white w-full overflow-y-scroll scroll-smooth sm:w-[77%] lg:w-[82%] grid grid-cols-12 py-4 gap-x-2"
+    >
+      <div class="col-span-12 h-full w-full overflow-y-scroll scroll-smooth">
+        <slot />
+      </div>
+    </section>
+  </div>
+</template>
+
+<script setup></script>
+<style scoped>
+.router-link-exact-active {
+  border-left: 4px solid #0050a8;
+}
+.router-link-disable {
+  border-left: none !important;
+}
+</style>

@@ -1,5 +1,5 @@
 <template>
-  <h1>teacher</h1>
+  <h1>grades</h1>
 </template>
 
 <script setup>
