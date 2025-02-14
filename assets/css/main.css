@@ -1,0 +1,96 @@
+@font-face {
+  font-family: "Grotesque-Regular";
+  src: url("/fonts/Grotesque-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Grotesque-Bold";
+  src: url("/fonts/Grotesque-Bold.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Grotesque-Semi-Bold";
+  src: url("/fonts/Grotesque-Semi-Bold.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Grotesque-Black";
+  src: url("/fonts/Grotesque-Black.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Grotesque-Thin";
+  src: url("/fonts/Grotesque-Thin.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Grotesque-Light";
+  src: url("/fonts/Grotesque-Light.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Grotesque-Extra-Light";
+  src: url("/fonts/Grotesque-Extra-Light.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+.Grotesque-Regular {
+  font-family: "Grotesque-Regular", sans-serif;
+}
+
+.Grotesque-Bold {
+  font-family: "Grotesque-Bold", sans-serif;
+}
+
+/* .poppinsExtraBold {
+      font-family: 'poppinsExtraBold', sans-serif;
+    } */
+
+.Grotesque-Semi-Bold {
+  font-family: "Grotesque-Semi-Bold", sans-serif;
+}
+
+.Grotesque-Black {
+  font-family: "Grotesque-Black", sans-serif;
+}
+
+.Grotesque-Thin {
+  font-family: "Grotesque-Thin", sans-serif;
+}
+
+.Grotesque-Light {
+  font-family: "Grotesque-Light", sans-serif;
+}
+
+.Grotesque-Extra-Light {
+  font-family: "Grotesque-Extra-Light", sans-serif;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+}

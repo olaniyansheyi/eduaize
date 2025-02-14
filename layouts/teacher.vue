@@ -8,7 +8,7 @@
       class="sm:h-[100vh] h-full sm:w-[23%] lg:w-[19%] bg-[#F7F7F7] items-center justify-start hidden sm:flex px-3 flex-col"
     >
       <div
-        class="w-full flex items-center justify-center border border-grey-200 bg-white mb-7 gap-x-2 rounded-md h-[100px]"
+        class="w-full flex items-center justify-center border border-grey-200 bg-white mb-7 gap-x-2 rounded-md h-[80px]"
       >
         <img
           src="~/assets/img/logo-eduaize.png"
@@ -161,7 +161,7 @@
           </span>
         </NuxtLink>
 
-        <NuxtLink to="/">
+        <NuxtLink to="/" class="me-auto">
           <div class="w-full flex items-center gap-x-3 px-4 mt-40">
             <img src="~/assets/img/logout.svg" class="w-5" />
             <span class="Grotesque-Light text-[#737373] text-xs sm:text-[14px]">
