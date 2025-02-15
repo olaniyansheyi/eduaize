@@ -10,9 +10,11 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
+    "chart.js": "^4.4.7",
     "nuxt": "^3.15.4",
     "radix-vue": "^1.9.14",
     "vue": "latest",
+    "vue-chartjs": "^5.3.2",
     "vue-router": "latest"
   },
   "devDependencies": {

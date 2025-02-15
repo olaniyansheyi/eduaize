@@ -149,6 +149,11 @@
       </div>
     </div>
 
+    <!-- student data display with charts  -->
+
+    <ChartBar />
+    <ChartPie />
+
     <!-- student database table  -->
 
     <div
