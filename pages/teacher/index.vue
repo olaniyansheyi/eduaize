@@ -1,36 +1,5 @@
 <template>
-  <div class="w-full gap-x-1 lg:gap-x-6 px-4 sm:px-10">
-    <div class="w-full py-3 flex items-center justify-between">
-      <h1
-        class="Grotesque-Bold font-semibold sm:text-xl text-md text-[#010109]"
-      >
-        Hello John
-      </h1>
-      <div class="relative sm:w-auto w-[60%]">
-        <div class="absolute inset-y-0 left-4 flex items-center">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="20px"
-            height="20px"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#7D7D7D"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-          >
-            <circle cx="11" cy="11" r="8"></circle>
-            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
-          </svg>
-        </div>
-        <input
-          type="text"
-          placeholder="Search student"
-          class="rounded-full bg-[#F7F7F7] text-textSecondary py-[8px] px-4 pl-12 outline-none w-full"
-        />
-      </div>
-    </div>
-
+  <div>
     <!-- Teacher details section  -->
     <div
       class="w-full border-[1px] border-[#F4F4FB] rounded-2xl px-8 flex flex-col items-center justify-center my-10 gap-y-5 pb-10"
@@ -242,6 +211,9 @@
               Pass / Fail
             </h3>
           </div>
+          <div class="w-[5%] text-center">
+            <h3 class="Grotesque-Regular text-md text-[#010109]">Action</h3>
+          </div>
         </div>
 
         <!-- Row with dropdown -->
@@ -282,6 +254,25 @@
             >
               {{ role.status }}
             </button>
+          </div>
+          <div class="w-[4%] text-center cursor-pointer relative">
+            <img
+              src="~/assets/img/icons/dotted-menu.png"
+              alt="Menu"
+              @click="toggleDropdownDelete(index)"
+            />
+            <!-- action modal -->
+            <div
+              v-if="dropdownVisible === index"
+              class="absolute right-0 top-10 bg-white shadow-lg rounded-lg w-[120px] py-2 z-10 Px-4"
+            >
+              <button
+                class="block w-full text-left px-4 py-2 text-[#C9252D] hover:bg-gray-100 text-xs"
+                @click="openDeleteRoleModal"
+              >
+                Delete Student
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -345,6 +336,35 @@
           </p>
         </div>
       </div>
+
+      <!-- modal for delete user -->
+
+      <Modal v-model="isDeleteRoleModalOpen">
+        <div class="flex flex-col gap-y-4 justify-center items-center w-full">
+          <div class="flex flex-col gap-y-1 justify-center items-center">
+            <img src="~/assets/img/unknown-user.png" alt="" />
+            <h2 class="text-[#1A1A1A] Grotesque-Regular">Delete Student?</h2>
+            <p class="text-[#4B4B4B] Grotesque-Regular text-[14px]">
+              All data will be permanently lost
+            </p>
+          </div>
+          <div class="flex flex-col gap-y-1 justify-center items-center w-full">
+            <button
+              @click="closeModal"
+              class="bg-[#EF3333] py-2 w-full text-white rounded-lg Grotesque-Regular"
+            >
+              Yes, please
+            </button>
+
+            <button
+              @click="closeModal"
+              class="bg-none py-2 w-full text-[#4B4B4B] Grotesque-Regular"
+            >
+              No, dont
+            </button>
+          </div>
+        </div>
+      </Modal>
     </div>
 
     <!-- student database table  -->
@@ -384,8 +404,6 @@ const roles = ref([
   },
 ]);
 
-const toggleState = ref(false);
-
 definePageMeta({
   layout: "teacher",
 });
@@ -410,6 +428,23 @@ onMounted(() => {
     }
   });
 });
+
+const dropdownVisible = ref(null);
+
+const isDeleteRoleModalOpen = ref(false);
+
+const openDeleteRoleModal = () => {
+  isDeleteRoleModalOpen.value = true;
+  dropdownVisible.value = null;
+};
+
+const toggleDropdownDelete = (index) => {
+  dropdownVisible.value = dropdownVisible.value === index ? null : index;
+};
+
+const closeModal = () => {
+  isDeleteRoleModalOpen.value = false;
+};
 </script>
 
 <style>
