@@ -151,8 +151,16 @@
 
     <!-- student data display with charts  -->
 
-    <ChartBar />
-    <ChartPie />
+    <div
+      class="w-full my-5 flex justify-start lg:justify-between items-start flex-wrap gap-8 gap-y-12 px-4 sm:px-10"
+    >
+      <div class="w-full sm:w-[80%] lg:w-[60%]">
+        <ChartBar />
+      </div>
+      <div class="w-full sm:w-[80%] lg:w-[30%]">
+        <ChartPie />
+      </div>
+    </div>
 
     <!-- student database table  -->
 
