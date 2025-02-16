@@ -82,7 +82,7 @@
             stroke="currentColor"
             class="w-5 h-5"
             :class="[
-              $route.path == '/teacher/student-performance'
+              $route.path.includes('/teacher/student-performance')
                 ? 'text-[#0050A8]'
                 : 'text-[#737373]',
             ]"
@@ -96,7 +96,7 @@
 
           <span
             :class="[
-              $route.path == '/teacher/student-performance/all'
+              $route.path.includes('/teacher/student-performance')
                 ? 'text-[#0050A8]'
                 : 'text-[#737373]',
             ]"
@@ -246,7 +246,7 @@
           stroke="currentColor"
           class="w-[29px]"
           :class="[
-            $route.path == '/teacher/student-performance'
+            $route.path.includes('/teacher/student-performance')
               ? 'text-[#0050A8]'
               : 'text-[#737373]',
           ]"
@@ -260,7 +260,7 @@
 
         <span
           :class="[
-            $route.path == '/teacher/student-performance'
+            $route.path.includes('/teacher/student-performance')
               ? 'text-[#0050A8]'
               : 'text-[#737373]',
           ]"
@@ -326,7 +326,7 @@
       </NuxtLink>
     </div>
 
-    <!-- sidebar section-mobile-display -->
+    <!-- header -->
 
     <section
       class="h-full bg-white w-full overflow-y-scroll scroll-smooth sm:w-[77%] lg:w-[82%] grid grid-cols-12 py-4 gap-x-2"
@@ -347,7 +347,11 @@
                 class="w-[15rem] max-w-none me-5"
               />
             </div>
-            <div class="relative sm:w-auto w-[60%]">
+            <div
+              @click="searchStore.handleToggleSearch"
+              v-if="!searchStore.openSearch"
+              class="relative sm:w-auto w-[60%]"
+            >
               <div class="absolute inset-y-0 left-4 flex items-center">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -378,7 +382,11 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useSearchStore } from "~/stores/search";
+
+const searchStore = useSearchStore();
+</script>
 <style scoped>
 .router-link-exact-active {
   border-left: 4px solid #0050a8;
