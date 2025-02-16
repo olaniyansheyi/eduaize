@@ -71,7 +71,7 @@
           </span>
         </NuxtLink>
         <NuxtLink
-          href="/teacher/student-performance"
+          href="/teacher/student-performance/all"
           class="w-full flex items-center gap-x-3 px-4"
         >
           <svg
@@ -96,7 +96,7 @@
 
           <span
             :class="[
-              $route.path == '/teacher/student-performance'
+              $route.path == '/teacher/student-performance/all'
                 ? 'text-[#0050A8]'
                 : 'text-[#737373]',
             ]"
@@ -177,7 +177,7 @@
     <!-- sidebar section-mobile-display -->
 
     <div
-      class="w-full right-0 left-0 sm:hidden fixed bottom-0 h-[70px] bg-[#F7F7F7] flex justify-around items-center py-3"
+      class="w-full right-0 left-0 sm:hidden fixed bottom-0 h-[70px] bg-[#F7F7F7] flex justify-around items-center py-3 z-50"
     >
       <NuxtLink
         href="/teacher"
@@ -235,7 +235,7 @@
         </span>
       </NuxtLink>
       <NuxtLink
-        href="/teacher/student-performance"
+        href="/teacher/student-performance/all"
         class="w-full flex items-center flex-col router-link-disable px-4"
       >
         <svg

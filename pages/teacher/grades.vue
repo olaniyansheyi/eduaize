@@ -44,6 +44,7 @@
 
     <!-- upload individually -->
     <div
+      v-if="selectedTab === 'individual'"
       class="w-full border-[1px] border-[#F4F4FB] rounded-2xl px-8 flex flex-col items-center justify-center my-10 gap-y-5 pb-10"
     >
       <div class="w-full mt-8 mb-4 flex justify-between gap-x-2 items-center">
@@ -78,16 +79,54 @@
             />
           </div>
 
-          <div class="w-full">
-            <label class="Grotesque-Regular text-md text-[#010109]">
-              Invite a new team member to this role
-            </label>
+          <div
+            class="w-full flex justify-between items-center sm:gap-x-0 gap-x-5"
+          >
+            <div class="">
+              <label class="Grotesque-Regular text-md text-[#010109]">
+                Student ID
+              </label>
 
-            <input
-              type="email"
-              class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1"
-              placeholder="email address"
-            />
+              <input
+                type="text"
+                class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1"
+              />
+            </div>
+            <div class="">
+              <label class="Grotesque-Regular text-md text-[#010109]">
+                Subject
+              </label>
+
+              <input
+                type="text"
+                class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1"
+              />
+            </div>
+          </div>
+
+          <div
+            class="w-full flex justify-between items-center sm:gap-x-0 gap-x-5"
+          >
+            <div class="">
+              <label class="Grotesque-Regular text-md text-[#010109]">
+                Grade/100
+              </label>
+
+              <input
+                type="text"
+                class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1"
+              />
+            </div>
+            <div class="">
+              <label class="Grotesque-Regular text-md text-[#010109]">
+                Remark
+              </label>
+
+              <input
+                type="text"
+                class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1"
+              />
+            </div>
           </div>
         </form>
         <div class="w-full lg:w-[45%] text-left">
@@ -118,7 +157,75 @@
 
     <!-- upload in bulk -->
 
-    <div v-if="selectedTab === 'bulk'"></div>
+    <div v-if="selectedTab === 'bulk'">
+      <div
+        v-if="selectedTab === 'bulk'"
+        class="w-full border-[1px] border-[#F4F4FB] rounded-2xl px-8 flex flex-col items-center justify-center mt-10 gap-y-5 pb-10"
+      >
+        <div class="w-full mt-8 mb-4 flex justify-between gap-x-2 items-center">
+          <div>
+            <h3 class="Grotesque-Regular text-md text-[#010109]">
+              Upload new Grades
+            </h3>
+            <p class="Grotesque-Regular text-[14px] text-[#737373]">
+              This Grade will be recorded for the current term
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- file drop upload  -->
+
+      <div
+        class="w-full border-[1px] border-[#F4F4FB] rounded-2xl px-8 py-5 flex flex-col items-center justify-center my-10 gap-y-5"
+        @dragover.prevent
+        @dragenter.prevent
+        @drop="handleDrop"
+      >
+        <div
+          class="w-full flex flex-col items-center justify-center gap-y-3 p-6 border-2 border-dashed border-gray-300 rounded-lg cursor-pointer"
+          @click="triggerFileInput"
+        >
+          <p class="Grotesque-Regular text-[14px] text-[#737373]">
+            Drag & Drop your file here or
+            <span class="text-[#0050A8] font-bold">click to upload</span>
+            (Your file must be in excell format)
+          </p>
+          <input
+            type="file"
+            ref="fileInput"
+            class="hidden"
+            @change="handleFileSelect"
+            multiple
+          />
+        </div>
+
+        <!-- Display Selected Files -->
+        <div v-if="selectedFiles.length > 0" class="w-full mt-4">
+          <h3 class="Grotesque-Regular text-md text-[#010109] mb-2">
+            Selected Files:
+          </h3>
+          <ul class="list-disc pl-5">
+            <li
+              v-for="(file, index) in selectedFiles"
+              :key="index"
+              class="text-[#737373] text-[14px]"
+            >
+              {{ file.name }} ({{ (file.size / 1024).toFixed(2) }} KB)
+            </li>
+          </ul>
+        </div>
+
+        <!-- Upload Button -->
+        <button
+          v-if="selectedFiles.length > 0"
+          @click="uploadFiles"
+          class="bg-[#0050A8] text-white px-5 py-2 rounded-lg text-sm mt-4"
+        >
+          Upload Files
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -129,6 +236,35 @@ definePageMeta({
 
 const selectedTab = ref("individual");
 const termWeeks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+// drag and drop implementation
+
+const selectedFiles = ref([]);
+const fileInput = ref(null);
+
+const triggerFileInput = () => {
+  fileInput.value.click();
+};
+
+const handleFileSelect = (event) => {
+  selectedFiles.value = [...event.target.files];
+};
+
+const handleDrop = (event) => {
+  event.preventDefault();
+  selectedFiles.value = [...event.dataTransfer.files];
+};
+
+const uploadFiles = () => {
+  if (selectedFiles.value.length === 0) return alert("No files selected!");
+
+  // Simulate file upload
+  console.log("Uploading files:", selectedFiles.value);
+  alert(`${selectedFiles.value.length} file(s) uploaded successfully!`);
+
+  // Clear selected files after upload
+  selectedFiles.value = [];
+};
 </script>
 
 <style>
