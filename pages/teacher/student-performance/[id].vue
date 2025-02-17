@@ -109,7 +109,15 @@
       </div>
     </div>
 
-    <AttendanceChart :attendance="8" />
+    <div
+      class="w-full my-5 flex justify-start lg:justify-between items-start flex-wrap gap-8 gap-y-12 px-4 sm:px-10"
+    >
+      <AttendanceChart :attendance="8" />
+
+      <div class="w-full sm:w-[80%] lg:w-[30%]">
+        <ChartPie :chartData="chartDataPie" :chartOptions="chartOptionsPie" />
+      </div>
+    </div>
   </div>
 </template>
 
@@ -118,5 +126,33 @@ import personImg from "~/assets/img/person.png";
 
 definePageMeta({
   layout: "teacher",
+});
+
+// chart option
+
+const chartDataPie = ref({
+  labels: ["score (50)", "Miss (50)"],
+  datasets: [
+    {
+      label: "Grade Distribution",
+      data: [1, 1], // You can modify this dynamically
+      backgroundColor: [
+        "#28A745", // Success Green
+        "#DC3545",
+      ],
+      borderWidth: 5,
+      borderColor: "#ffffff",
+      borderRadius: 10,
+    },
+  ],
+});
+
+// Dynamic Chart Options
+const chartOptionsPie = ref({
+  responsive: true,
+  cutout: "60%",
+  plugins: {
+    legend: { position: "bottom" },
+  },
 });
 </script>
