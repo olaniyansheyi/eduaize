@@ -16,7 +16,7 @@ ChartJS.register(BarElement, CategoryScale, LinearScale, Tooltip, Legend);
 // Define props
 const props = defineProps({
   chartData: Object,
-  chartOptions: Object
+  chartOptions: Object,
 });
 </script>
 

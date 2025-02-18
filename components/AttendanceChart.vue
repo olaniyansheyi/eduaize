@@ -66,6 +66,8 @@ const centerTextPlugin = {
   },
 };
 
+// ChartJS.register(centerTextPlugin);
+
 // Chart Options (Attach Plugin Locally)
 const chartOptions = computed(() => ({
   responsive: true,
