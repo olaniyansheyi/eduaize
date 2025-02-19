@@ -24,6 +24,10 @@
     </div>
   </div>
 
+  <!-- student at risk risk  -->
+
+  <StudentAtRiskList />
+
   <!-- students table  -->
 
   <studentsTable />
