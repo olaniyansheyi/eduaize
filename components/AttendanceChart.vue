@@ -66,9 +66,6 @@ const centerTextPlugin = {
   },
 };
 
-// ChartJS.register(centerTextPlugin);
-
-// Chart Options (Attach Plugin Locally)
 const chartOptions = computed(() => ({
   responsive: true,
   cutout: "65%", // Thicker arc

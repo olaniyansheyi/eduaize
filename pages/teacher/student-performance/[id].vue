@@ -47,7 +47,7 @@
       </div>
       <div class="w-full flex justify-between items-start flex-wrap gap-5 mt-4">
         <div
-          class="rounded-xl flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-auto"
+          class="rounded-xl py flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-[47%] sm:gap-x-0 lg:w-[22%]"
         >
           <img
             src="~/assets/img/individual-user.png"
@@ -62,7 +62,7 @@
           </div>
         </div>
         <div
-          class="rounded-xl flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-auto"
+          class="rounded-xl py flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-[47%] sm:gap-x-0 lg:w-[22%]"
         >
           <img
             src="~/assets/img/individual-user.png"
@@ -77,7 +77,7 @@
           </div>
         </div>
         <div
-          class="rounded-xl flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-auto"
+          class="rounded-xl py flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-[47%] sm:gap-x-0 lg:w-[22%]"
         >
           <img
             src="~/assets/img/individual-user.png"
@@ -92,7 +92,7 @@
           </div>
         </div>
         <div
-          class="rounded-xl flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-auto"
+          class="rounded-xl py flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-[47%] sm:gap-x-0 lg:w-[22%]"
         >
           <img
             src="~/assets/img/individual-user.png"

@@ -55,14 +55,16 @@
           class="w-full flex justify-between items-start flex-wrap gap-5 mt-4"
         >
           <div
-            class="rounded-xl py flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-auto"
+            class="rounded-xl py flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-[47%] sm:gap-x-0 lg:w-[22%]"
           >
             <img
               src="~/assets/img/individual-user.png"
               class="w-[45px] rounded-full"
               alt=""
             />
-            <div class="flex justify-start items-start flex-col gap-y-1">
+            <div
+              class="flex justify-start items-start flex-col gap-y-1 me-auto"
+            >
               <p class="text-[#010109] text-sm">100</p>
               <h3 class="me-auto Grotesque-Regular text-[#737373] text-xs">
                 Toatal sudent
@@ -70,14 +72,33 @@
             </div>
           </div>
           <div
-            class="rounded-xl py flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-auto"
+            class="rounded-xl py flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-[47%] sm:gap-x-0 lg:w-[22%]"
           >
             <img
               src="~/assets/img/individual-user.png"
               class="w-[45px] rounded-full"
               alt=""
             />
-            <div class="flex justify-start items-start flex-col gap-y-1">
+            <div
+              class="flex justify-start items-start flex-col gap-y-1 me-auto"
+            >
+              <p class="text-[#010109] text-sm">5</p>
+              <h3 class="me-auto Grotesque-Regular text-[#737373] text-xs">
+                Toatal subject Assigned
+              </h3>
+            </div>
+          </div>
+          <div
+            class="rounded-xl py flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-[47%] sm:gap-x-0 lg:w-[22%]"
+          >
+            <img
+              src="~/assets/img/individual-user.png"
+              class="w-[45px] rounded-full"
+              alt=""
+            />
+            <div
+              class="flex justify-start items-start flex-col gap-y-1 me-auto"
+            >
               <p class="text-[#010109] text-sm">100</p>
               <h3 class="me-auto Grotesque-Regular text-[#737373] text-xs">
                 Toatal sudent
@@ -85,29 +106,16 @@
             </div>
           </div>
           <div
-            class="rounded-xl py flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-auto"
+            class="rounded-xl py flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-[47%] sm:gap-x-0 lg:w-[22%]"
           >
             <img
               src="~/assets/img/individual-user.png"
               class="w-[45px] rounded-full"
               alt=""
             />
-            <div class="flex justify-start items-start flex-col gap-y-1">
-              <p class="text-[#010109] text-sm">100</p>
-              <h3 class="me-auto Grotesque-Regular text-[#737373] text-xs">
-                Toatal sudent
-              </h3>
-            </div>
-          </div>
-          <div
-            class="rounded-xl py flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-auto"
-          >
-            <img
-              src="~/assets/img/individual-user.png"
-              class="w-[45px] rounded-full"
-              alt=""
-            />
-            <div class="flex justify-start items-start flex-col gap-y-1">
+            <div
+              class="flex justify-start items-start flex-col gap-y-1 me-auto"
+            >
               <p class="text-[#010109] text-sm">100</p>
               <h3 class="me-auto Grotesque-Regular text-[#737373] text-xs">
                 Toatal sudent
@@ -115,6 +123,35 @@
             </div>
           </div>
         </div>
+      </div>
+    </div>
+
+    <div class="pt-5 ms-auto">
+      <div
+        class="select-container w-[10.5rem] ms-auto"
+        :class="isOpenFilterChart ? ' h-[10.5rem]' : ''"
+      >
+        <div
+          class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between cursor-pointer relative mb-2 mt-1"
+          @click="toggleDropdown"
+        >
+          <span>{{ selectedOption }}</span>
+          <img src="~/assets/img/icons/selectdown.png" class="" />
+        </div>
+
+        <ul
+          v-if="isOpenFilterChart"
+          class="absolute left-0 top-[35%] w-full bg-white border-[1px] border-[#2F2B43]/10 rounded-lg shadow-lg z-10"
+        >
+          <li
+            v-for="option in options"
+            :key="option"
+            class="px-3 py-2 hover:bg-[#F9F9FC] cursor-pointer"
+            @click="selectOption(option)"
+          >
+            {{ option }}
+          </li>
+        </ul>
       </div>
     </div>
 
@@ -130,6 +167,10 @@
         <ChartPie :chartData="chartDataPie" :chartOptions="chartOptionsPie" />
       </div>
     </div>
+
+    <!-- student at risk risk  -->
+
+    <StudentAtRiskList />
 
     <!-- student database table  -->
     <StudentsTable />
@@ -223,6 +264,19 @@ const chartOptionsPie = ref({
     legend: { position: "bottom" },
   },
 });
+
+const isOpenFilterChart = ref(false);
+const selectedOption = ref("Last Term");
+const options = ref(["Last Term", "Upper Last Term"]);
+
+const toggleDropdown = () => {
+  isOpenFilterChart.value = !isOpenFilterChart.value;
+};
+
+const selectOption = (option) => {
+  selectedOption.value = option;
+  isOpenFilterChart.value = false;
+};
 </script>
 
 <style>
