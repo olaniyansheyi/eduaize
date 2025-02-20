@@ -105,40 +105,7 @@
             Student performance
           </span>
         </NuxtLink>
-        <NuxtLink
-          href="/teacher/chats"
-          class="w-full flex items-center gap-x-3 px-4"
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="w-5 h-5"
-            :class="[
-              $route.path == '/teacher/chats'
-                ? 'text-[#0050A8]'
-                : 'text-[#737373]',
-            ]"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M8.25 8.25h7.5m-7.5 3h4.5M12 21l-3-3H4.5A2.25 2.25 0 012.25 15V5.25A2.25 2.25 0 014.5 3h15A2.25 2.25 0 0121.75 5.25V15a2.25 2.25 0 01-2.25 2.25H12z"
-            />
-          </svg>
-          <span
-            :class="[
-              $route.path == '/notifications'
-                ? 'text-[#0050A8]'
-                : 'text-[#737373]',
-            ]"
-            class="Grotesque-Light text-xs sm:text-[14px]"
-          >
-            Chats
-          </span>
-        </NuxtLink>
+
         <NuxtLink
           href="/teacher/notifications"
           class="w-full flex items-center gap-x-3 px-4"

@@ -110,6 +110,17 @@
     </div>
 
     <div
+      class="w-full bg-[#FFF3CD] text-[#856404] p-4 rounded-lg flex items-start"
+    >
+      <div>
+        <h3 class="font-bold text-xl pb-4">Performance Alert</h3>
+        <p class="text-sm tracking-wider">
+          {{ insightMessage }}
+        </p>
+      </div>
+    </div>
+
+    <div
       class="w-full my-5 flex justify-start lg:justify-between items-start flex-wrap gap-8 gap-y-12 px-4 sm:px-10"
     >
       <AttendanceChart :attendance="8" />
@@ -155,4 +166,24 @@ const chartOptionsPie = ref({
     legend: { position: "bottom" },
   },
 });
+
+const previousGrades = ref([75, 60, 50]);
+const attendanceRate = ref((8 / 12) * 100);
+
+const insightMessage = computed(() => {
+  const lastGrade = previousGrades.value[0]; // Most recent
+  const beforeLastGrade = previousGrades.value[1];
+
+  if (lastGrade < 50) {
+    return "⚠️ Student is at risk! Immediate improvement is needed.";
+  } else if (lastGrade < beforeLastGrade) {
+    return "📉 Performance has dropped compared to last term. Consider extra support.";
+  } else if (attendanceRate.value < 70) {
+    return "🚨 Low attendance detected! Encourage regular participation and Drop Alert for the student's Parent";
+  } else {
+    return "✅ Student is performing well. Keep up the good work!";
+  }
+});
 </script>
+
+<style></style>

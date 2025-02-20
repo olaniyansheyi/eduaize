@@ -79,27 +79,66 @@
             />
           </div>
 
+          <h1 class="Grotesque-Regular text-md text-[#737373]">
+            List Subjects Assigned To You
+          </h1>
+
           <div
-            class="w-full flex justify-between items-center sm:gap-x-0 gap-x-5"
+            class="w-full flex justify-between items-center sm:gap-x-0 gap-x-5 flex-wrap"
           >
-            <div class="">
+            <div class="sm:w-auto w-[46%]">
               <label class="Grotesque-Regular text-md text-[#010109]">
-                Student ID
+                Math
               </label>
 
               <input
                 type="text"
                 class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1"
+                placeholder="Grade/100"
               />
             </div>
-            <div class="">
+            <div class="sm:w-auto w-[46%]">
               <label class="Grotesque-Regular text-md text-[#010109]">
-                Subject
+                English
               </label>
 
               <input
                 type="text"
                 class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1"
+                placeholder="Grade/100"
+              />
+            </div>
+            <div class="sm:w-auto w-[46%]">
+              <label class="Grotesque-Regular text-md text-[#010109]">
+                Basic Tech
+              </label>
+
+              <input
+                type="text"
+                class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1"
+                placeholder="Grade/100"
+              />
+            </div>
+            <div class="sm:w-auto w-[46%]">
+              <label class="Grotesque-Regular text-md text-[#010109]">
+                Economics
+              </label>
+
+              <input
+                type="text"
+                class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1"
+                placeholder="Grade/100"
+              />
+            </div>
+            <div class="sm:w-auto w-[46%]">
+              <label class="Grotesque-Regular text-md text-[#010109]">
+                Agric
+              </label>
+
+              <input
+                type="text"
+                class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1"
+                placeholder="Grade/100"
               />
             </div>
           </div>
@@ -109,7 +148,7 @@
           >
             <div class="">
               <label class="Grotesque-Regular text-md text-[#010109]">
-                Grade/100
+                Student ID
               </label>
 
               <input
