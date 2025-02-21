@@ -18,7 +18,7 @@
       <div
         class="h-full rounded-2xl sm:w-[100%] md:w-full flex flex-col items-center justify-start lg:py-4 gap-y-5 mt-8"
       >
-        <NuxtLink href="/teacher" class="w-full flex items-center gap-x-3 px-4">
+        <NuxtLink href="/admin" class="w-full flex items-center gap-x-3 px-4">
           <img
             v-if="$route.path == '/teacher'"
             src="~/assets/img/dashboard.svg"
@@ -36,7 +36,7 @@
         </NuxtLink>
 
         <NuxtLink
-          href="/teacher/grades"
+          href="/admin/export-report"
           class="w-full flex items-center gap-x-3 px-4"
         >
           <svg
@@ -47,7 +47,7 @@
             stroke="currentColor"
             class="w-5 h-5"
             :class="[
-              $route.path == '/teacher/grades'
+              $route.path == '/admin/export-report'
                 ? 'text-[#0050A8]'
                 : 'text-[#737373]',
             ]"
@@ -61,17 +61,17 @@
 
           <span
             :class="[
-              $route.path == '/notifications'
+              $route.path == '/admin/export-report'
                 ? 'text-[#0050A8]'
                 : 'text-[#737373]',
             ]"
             class="Grotesque-Light text-xs sm:text-[14px]"
           >
-            Grades Upload
+            Export Report
           </span>
         </NuxtLink>
         <NuxtLink
-          href="/teacher/student-performance/all"
+          href="/admin/student-performance/all"
           class="w-full flex items-center gap-x-3 px-4"
         >
           <svg
@@ -82,7 +82,7 @@
             stroke="currentColor"
             class="w-5 h-5"
             :class="[
-              $route.path.includes('/teacher/student-performance')
+              $route.path.includes('/admin/student-performance')
                 ? 'text-[#0050A8]'
                 : 'text-[#737373]',
             ]"
@@ -96,7 +96,7 @@
 
           <span
             :class="[
-              $route.path.includes('/teacher/student-performance')
+              $route.path.includes('/admin/student-performance')
                 ? 'text-[#0050A8]'
                 : 'text-[#737373]',
             ]"
@@ -105,9 +105,44 @@
             Student performance
           </span>
         </NuxtLink>
+        <NuxtLink
+          href="/admin/manage-teacher"
+          class="w-full flex items-center gap-x-3 px-4"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="w-5 h-5"
+            :class="[
+              $route.path.includes('/admin/student-performance')
+                ? 'text-[#0050A8]'
+                : 'text-[#737373]',
+            ]"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3 18v-6a3 3 0 013-3h12a3 3 0 013 3v6m-3-3a3 3 0 11-6 0 3 3 0 116 0zm-7-6V5a1 1 0 011-1h2a1 1 0 011 1v4"
+            />
+          </svg>
+
+          <span
+            :class="[
+              $route.path.includes('/admin/manage-teacher')
+                ? 'text-[#0050A8]'
+                : 'text-[#737373]',
+            ]"
+            class="Grotesque-Light text-xs sm:text-[14px]"
+          >
+            Teacher
+          </span>
+        </NuxtLink>
 
         <NuxtLink
-          href="/teacher/notifications"
+          href="/admin/notifications"
           class="w-full flex items-center gap-x-3 px-4"
         >
           <img
@@ -147,18 +182,18 @@
       class="w-full right-0 left-0 sm:hidden fixed bottom-0 h-[70px] bg-[#F7F7F7] flex justify-around items-center py-3 z-50"
     >
       <NuxtLink
-        href="/teacher"
+        href="/admin"
         class="w-full flex items-center flex-col gap-y-0 px-4 router-link-disable"
       >
         <img
-          v-if="$route.path == '/teacher'"
+          v-if="$route.path == '/admin'"
           src="~/assets/img/dashboard.svg"
           class="w-[29px]"
         />
         <img v-else src="~/assets/img/dashboard2.svg" class="w-[28px]" />
         <span
           :class="[
-            $route.path == '/teacher' ? 'text-[#0050A8]' : 'text-[#737373]',
+            $route.path == '/admin' ? 'text-[#0050A8]' : 'text-[#737373]',
           ]"
           class="Grotesque-Light text-xs sm:text-[12px]"
         >
@@ -167,7 +202,7 @@
       </NuxtLink>
 
       <NuxtLink
-        href="/teacher/grades"
+        href="/admin/export-report"
         class="w-full flex items-center gap-x-0 flex-col router-link-disable px-4"
       >
         <svg
@@ -178,7 +213,7 @@
           stroke="currentColor"
           class="w-[29px]"
           :class="[
-            $route.path == '/teacher/grades'
+            $route.path == '/admin/export-report'
               ? 'text-[#0050A8]'
               : 'text-[#737373]',
           ]"
@@ -192,17 +227,17 @@
 
         <span
           :class="[
-            $route.path == '/teacher/grades'
+            $route.path == '/admin/export-report'
               ? 'text-[#0050A8]'
               : 'text-[#737373]',
           ]"
           class="Grotesque-Light text-xs sm:text-[12px]"
         >
-          Upload
+          Export Report
         </span>
       </NuxtLink>
       <NuxtLink
-        href="/teacher/student-performance/all"
+        href="/admin/manage-teacher"
         class="w-full flex items-center flex-col router-link-disable px-4"
       >
         <svg
@@ -213,7 +248,7 @@
           stroke="currentColor"
           class="w-[29px]"
           :class="[
-            $route.path.includes('/teacher/student-performance')
+            $route.path.includes('/admin/manage-teacher')
               ? 'text-[#0050A8]'
               : 'text-[#737373]',
           ]"
@@ -227,29 +262,65 @@
 
         <span
           :class="[
-            $route.path.includes('/teacher/student-performance')
+            $route.path.includes('/admin/manage-teacher')
               ? 'text-[#0050A8]'
               : 'text-[#737373]',
           ]"
           class="Grotesque-Light text-xs sm:text-[12px]"
         >
-          performance
+          Teacher
         </span>
       </NuxtLink>
 
       <NuxtLink
-        href="/teacher/notifications"
+        href="/admin/student-performance/all"
+        class="w-full flex items-center flex-col router-link-disable px-4"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke-width="1.5"
+          stroke="currentColor"
+          class="w-[29px]"
+          :class="[
+            $route.path.includes('/admin/student-performance')
+              ? 'text-[#0050A8]'
+              : 'text-[#737373]',
+          ]"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            d="M3 18v-6a3 3 0 013-3h12a3 3 0 013 3v6m-3-3a3 3 0 11-6 0 3 3 0 116 0zm-7-6V5a1 1 0 011-1h2a1 1 0 011 1v4"
+          />
+        </svg>
+
+        <span
+          :class="[
+            $route.path.includes('/admin/student-performance')
+              ? 'text-[#0050A8]'
+              : 'text-[#737373]',
+          ]"
+          class="Grotesque-Light text-xs sm:text-[12px]"
+        >
+          Student
+        </span>
+      </NuxtLink>
+
+      <NuxtLink
+        href="/admin/notifications"
         class="w-full flex items-center gap-x-0 flex-col router-link-disable px-4"
       >
         <img
-          v-if="$route.path == '/teacher/notifications'"
+          v-if="$route.path == '/admin/notifications'"
           src="~/assets/img/bell.svg"
           class="w-[29px]"
         />
         <img v-else src="~/assets/img/bell2.svg" class="w-[29px]" />
         <span
           :class="[
-            $route.path == '/teacher/notifications'
+            $route.path == '/admin/notifications'
               ? 'text-[#0050A8]'
               : 'text-[#737373]',
           ]"
