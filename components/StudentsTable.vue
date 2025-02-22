@@ -80,41 +80,41 @@
 
       <!-- Row with dropdown -->
       <div
-        v-for="(role, index) in roles"
+        v-for="(teacher, index) in teachers"
         :key="index"
         class="flex justify-between border-b items-center border-b-[#E9E5E5] w-[1000px] h-[68px] px-5 relative"
       >
         <div class="flex-1 text-left">
           <div class="flex w-full justify-start items-center gap-x-3">
-            <img :src="role.image" class="w-[28px] rounded-full" lt="" />
+            <img :src="teacher.image" class="w-[28px] rounded-full" lt="" />
             <p class="text-[#4B4B4B] Grotesque-Regular text-[14px]">
-              {{ role.name }}
+              {{ teacher.name }}
             </p>
           </div>
         </div>
         <div class="flex-1 text-left">
           <p class="text-[#4B4B4B] Grotesque-Regular text-[14px]">
-            {{ role.description }}
+            {{ teacher.score }}
           </p>
         </div>
         <div class="flex-1 text-center">
           <p class="text-[#4B4B4B] Grotesque-Regular text-[14px]">
-            {{ role.dateCreated }}
+            {{ teacher.submitted }}
           </p>
         </div>
         <div class="flex-1 text-center">
           <p class="text-[#4B4B4B] Grotesque-Regular text-[14px]">
-            {{ role.permissions }}
+            {{ teacher.grade }}
           </p>
         </div>
         <div class="flex-1 text-center">
           <button
             :class="[
               'py-1 px-8 rounded-lg text-[14px]',
-              role.status === 'fail' ? 'fail-btn' : 'pass-btn',
+              teacher.status === 'fail' ? 'fail-btn' : 'pass-btn',
             ]"
           >
-            {{ role.status }}
+            {{ teacher.status }}
           </button>
         </div>
         <div class="w-[4%] text-center cursor-pointer relative">
@@ -133,6 +133,18 @@
               @click="openDeleteRoleModal"
             >
               Delete Student
+            </button>
+            <button
+              class="block w-full text-left px-4 py-2 text-[#0050A8] hover:bg-gray-100 text-xs"
+              @click="openCreateStudentModal(teacher)"
+            >
+              Create Student
+            </button>
+            <button
+              class="block w-full text-left px-4 py-2 text-[#0050A8] hover:bg-gray-100 text-xs"
+              @click="openEditStudentModal(teacher)"
+            >
+              Edit Student
             </button>
           </div>
         </div>
@@ -227,6 +239,72 @@
         </div>
       </div>
     </Modal>
+
+    <!-- Create/Edit Student Modal -->
+    <Modal v-model="isStudentModalOpen">
+      <div class="flex flex-col gap-y-4 justify-center items-center w-full">
+        <h2 class="text-[#1A1A1A] Grotesque-Regular">
+          {{ isEditMode ? "Edit Student" : "Create Student" }}
+        </h2>
+        <form class="w-full lg:w-[45%] flex flex-col gap-y-4">
+          <div class="w-full">
+            <label class="Grotesque-Regular text-md text-[#010109]"
+              >Student Name</label
+            >
+            <input
+              type="text"
+              v-model="editStudentData.name"
+              class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
+            />
+          </div>
+          <div class="w-full">
+            <label class="Grotesque-Regular text-md text-[#010109]"
+              >Score</label
+            >
+            <input
+              type="text"
+              v-model="editStudentData.score"
+              class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
+            />
+          </div>
+          <div class="w-full">
+            <label class="Grotesque-Regular text-md text-[#010109]"
+              >Submitted</label
+            >
+            <input
+              type="text"
+              v-model="editStudentData.submitted"
+              class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
+            />
+          </div>
+          <div class="w-full">
+            <label class="Grotesque-Regular text-md text-[#010109]"
+              >Grade</label
+            >
+            <input
+              type="text"
+              v-model="editStudentData.grade"
+              class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
+            />
+          </div>
+          <div class="w-full">
+            <label class="Grotesque-Regular text-md text-[#010109]"
+              >Upload Avatar</label
+            >
+            <input
+              type="file"
+              class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
+            />
+          </div>
+          <button
+            @click="closeStudentModal"
+            class="bg-[#0050A8] py-2 w-full text-white rounded-lg"
+          >
+            {{ isEditMode ? "Update Student" : "Create Student" }}
+          </button>
+        </form>
+      </div>
+    </Modal>
   </div>
 </template>
 
@@ -234,28 +312,28 @@
 import personImg from "~/assets/img/person.png";
 import personImg2 from "~/assets/img/person2.png";
 import personImg3 from "~/assets/img/person3.png";
-const roles = ref([
+const teachers = ref([
   {
-    name: "Super Administrator",
-    description: "100/100",
-    dateCreated: "07/07/23, 13:23pm",
-    permissions: 46,
+    name: "John Doe",
+    score: "85/100",
+    submitted: "Yes",
+    grade: "A",
     status: "pass",
     image: personImg,
   },
   {
-    name: "Administrator",
-    description: "20/100",
-    dateCreated: "07/07/23, 13:23pm",
-    permissions: 56,
+    name: "Jane Smith",
+    score: "60/100",
+    submitted: "Yes",
+    grade: "C",
     status: "fail",
     image: personImg2,
   },
   {
-    name: "Product Ownerr",
-    description: "70/100",
-    dateCreated: "07/07/23, 13:23pm",
-    permissions: 45,
+    name: "Michael Johnson",
+    score: "90/100",
+    submitted: "Yes",
+    grade: "A+",
     status: "pass",
     image: personImg3,
   },
@@ -283,6 +361,38 @@ const openDeleteRoleModal = () => {
 
 const toggleDropdownDelete = (index) => {
   dropdownVisible.value = dropdownVisible.value === index ? null : index;
+};
+
+const isStudentModalOpen = ref(false);
+const isEditMode = ref(false);
+const editStudentData = ref({
+  name: "",
+  score: "",
+  submitted: "",
+  grade: "",
+  image: null,
+});
+
+const openCreateStudentModal = () => {
+  isEditMode.value = false;
+  editStudentData.value = {
+    name: "",
+    score: "",
+    submitted: "",
+    grade: "",
+    image: null,
+  };
+  isStudentModalOpen.value = true;
+};
+
+const openEditStudentModal = (student) => {
+  isEditMode.value = true;
+  editStudentData.value = { ...student };
+  isStudentModalOpen.value = true;
+};
+
+const closeStudentModal = () => {
+  isStudentModalOpen.value = false;
 };
 
 const closeModal = () => {
