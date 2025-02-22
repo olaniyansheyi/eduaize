@@ -74,7 +74,7 @@
         class="w-full flex flex-col gap-y-5 items-center justify-center px-5"
       >
         <NuxtLink
-          to="/teacher/student-performance/1"
+          to="/student-performance"
           @click="searchStore.handleToggleSearch"
           class="flex justify-between items-center w-full hover:bg-[#e2dddd3b]"
         >
@@ -107,7 +107,7 @@
           </div>
         </NuxtLink>
         <NuxtLink
-          to="/teacher/student-performance/1"
+          to="/student-performance"
           @click="searchStore.handleToggleSearch"
           class="flex justify-between items-center w-full hover:bg-[#e2dddd3b]"
         >
@@ -140,7 +140,7 @@
           </div>
         </NuxtLink>
         <NuxtLink
-          to="/teacher/student-performance/1"
+          to="/student-performance"
           @click="searchStore.handleToggleSearch"
           class="flex justify-between items-center w-full hover:bg-[#e2dddd3b]"
         >

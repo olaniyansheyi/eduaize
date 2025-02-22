@@ -86,7 +86,7 @@
           <div
             class="w-full flex justify-between items-center sm:gap-x-0 gap-x-5 flex-wrap"
           >
-            <div class="sm:w-auto w-[46%]">
+            <div class="lg:w-auto w-[46%]">
               <label class="Grotesque-Regular text-md text-[#010109]">
                 Math
               </label>
@@ -97,7 +97,7 @@
                 placeholder="Grade/100"
               />
             </div>
-            <div class="sm:w-auto w-[46%]">
+            <div class="lg:w-auto w-[46%]">
               <label class="Grotesque-Regular text-md text-[#010109]">
                 English
               </label>
@@ -108,7 +108,7 @@
                 placeholder="Grade/100"
               />
             </div>
-            <div class="sm:w-auto w-[46%]">
+            <div class="lg:w-auto w-[46%]">
               <label class="Grotesque-Regular text-md text-[#010109]">
                 Basic Tech
               </label>
@@ -119,7 +119,7 @@
                 placeholder="Grade/100"
               />
             </div>
-            <div class="sm:w-auto w-[46%]">
+            <div class="lg:w-auto w-[46%]">
               <label class="Grotesque-Regular text-md text-[#010109]">
                 Economics
               </label>
@@ -130,7 +130,7 @@
                 placeholder="Grade/100"
               />
             </div>
-            <div class="sm:w-auto w-[46%]">
+            <div class="lg:w-auto w-[46%]">
               <label class="Grotesque-Regular text-md text-[#010109]">
                 Agric
               </label>

@@ -117,7 +117,7 @@
             stroke="currentColor"
             class="w-5 h-5"
             :class="[
-              $route.path.includes('/admin/student-performance')
+              $route.path.includes('/admin/manage-teacher')
                 ? 'text-[#0050A8]'
                 : 'text-[#737373]',
             ]"

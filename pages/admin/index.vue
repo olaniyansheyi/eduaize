@@ -1,6 +1,6 @@
 <template>
   <div
-    class="w-full border-[1px] border-[#F4F4FB] rounded-2xl px-8 flex flex-col items-center justify-center my-10 gap-y-5 pb-10"
+    class="w-full border-[1px] border-[#F4F4FB] rounded-2xl flex flex-col items-center justify-center my-10 gap-y-5 pb-10"
   >
     <div class="w-full flex justify-between items-start flex-wrap gap-5 mt-4">
       <div
@@ -70,8 +70,7 @@
     </div>
 
     <!-- student at risk risk  -->
-
-    <StudentAtRiskList />
+    <ExportReport />
 
     <!-- student database table  -->
     <StudentsTable />
