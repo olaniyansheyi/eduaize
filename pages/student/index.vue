@@ -3,14 +3,14 @@
     class="w-full rounded-2xl flex flex-col items-center justify-center my-10 gap-y-5 pb-10"
   >
     <div class="flex justify-between items-center w-full">
-      <h2 class="sm:flex hidden font-bold text-[#010109]">Parent Dashboard</h2>
-      <div class="relative sm:w-[60%] w-[80%] ms-auto">
+      <h2 class="sm:flex hidden font-bold text-[#010109]">Your Performance</h2>
+      <div class="relative ms-auto">
         <div
           class="custom-select w-full bg-[#F9F9FC] border border-[#2F2B43]/10 h-[50px] px-5 rounded-lg flex items-center justify-between cursor-pointer relative mt-1 gap-x-3"
           @click="toggleDropdown"
         >
           <span>{{ selectedChildName }}</span>
-          <img src="~/assets/img/icons/selectdown.png" class="w-4 h-4" />
+          <img src="~/assets/img/icons/selectdown.png" class="w-2 h-2" />
         </div>
 
         <!-- Dropdown List with Smooth Transition -->
@@ -67,7 +67,7 @@
       </div>
     </div>
 
-    <!-- Child Summary -->
+    <!-- srudent Summary -->
     <div
       class="w-full flex justify-between items-start flex-wrap gap-5 mt-4 px-4"
     >
@@ -82,8 +82,17 @@
     </div>
 
     <!-- Performance Chart -->
-    <div class="mt-6 w-full">
-      <PerformanceChart :chartData="chartData" :chartOptions="chartOptions" />
+
+    <div
+      class="w-full my-5 flex justify-start lg:justify-between items-start flex-wrap gap-8 gap-y-12 px-4 sm:px-10 sm:flex-nowrap"
+    >
+      <div class="sm:w-[45%] w-[75%] mx-auto">
+        <AttendanceChart :attendance="8" />
+      </div>
+
+      <div class="sm:w-[45%] lg:w-[20%] sm:mx-auto mt-auto w-[75%] mx-auto">
+        <ChartPie :chartData="chartDataPie" :chartOptions="chartOptionsPie" />
+      </div>
     </div>
 
     <!-- AI Insights & Alerts -->
@@ -115,7 +124,7 @@
     <!-- Contact Teacher -->
     <form class="w-full flex flex-col gap-y-4 mt-5 lg:w-[45%] lg:me-auto">
       <div class="w-full">
-        <label class="text-md text-[#010109]">Contact Teacher</label>
+        <label class="text-md text-[#010109]">Contact Your Teacher</label>
         <textarea
           class="custom-select w-full bg-[#F9F9FC] border border-[#2F2B43]/10 h-[87px] px-3 rounded-lg outline-none mb-2 mt-1 py-3"
         ></textarea>
@@ -205,27 +214,31 @@ const alerts = ref(
   "John was absent 3 times last month. Please check with the school."
 );
 
-const chartData = ref({
-  labels: ["Week 1", "Week 2", "Week 3", "Week 4"],
+// chart option
+
+const chartDataPie = ref({
+  labels: ["score (50)", "Miss (50)"],
   datasets: [
     {
-      label: "Performance",
-      data: [78, 82, 85, 87],
-      borderColor: "#0050A8",
-      backgroundColor: "rgba(0, 80, 168, 0.2)",
-      borderWidth: 2,
-      pointBackgroundColor: "#0050A8",
-      tension: 0.4,
+      label: "Grade Distribution",
+      data: [1, 1], // You can modify this dynamically
+      backgroundColor: [
+        "#28A745", // Success Green
+        "#DC3545",
+      ],
+      borderWidth: 5,
+      borderColor: "#ffffff",
+      borderRadius: 10,
     },
   ],
 });
 
-const chartOptions = ref({
+// Dynamic Chart Options
+const chartOptionsPie = ref({
   responsive: true,
-  maintainAspectRatio: false,
-  scales: {
-    x: { grid: { display: false } },
-    y: { beginAtZero: true, grid: { display: false } },
+  cutout: "60%",
+  plugins: {
+    legend: { position: "bottom" },
   },
 });
 </script>
