@@ -89,7 +89,8 @@ Since you're using **Supabase**, your database should follow a **relational stru
 ---
 
 ## **4️⃣ Representing Student Performance in Chart.js**  
-**Best approach:** Use a combination of different **Chart.js** types for clarity.  
+**Best approach:** Use a combination of different **Chart.js** types for clarity. 
+ 
 
 ### **📊 Recommended Charts**  
 1. **Line Chart** → Tracks **student progress over time** (Test Scores, Attendance).  

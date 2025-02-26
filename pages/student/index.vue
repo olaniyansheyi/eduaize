@@ -49,6 +49,7 @@
           <h3 class="me-auto Grotesque-Regular text-md text-[#010109]">
             John Anetor
           </h3>
+
           <div class="flex justify-start items-start flex-col gap-y-1">
             <p class="text-[#737373] text-sm">Student ID</p>
             <h3 class="me-auto Grotesque-Regular text-sm text-[#010109]">
@@ -81,17 +82,54 @@
       </div>
     </div>
 
-    <!-- Performance Chart -->
+    <!-- performance   -->
 
-    <div
-      class="w-full my-5 flex justify-start lg:justify-between items-start flex-wrap gap-8 gap-y-12 px-4 sm:px-10 sm:flex-nowrap"
-    >
-      <div class="sm:w-[45%] w-[75%] mx-auto">
-        <AttendanceChart :attendance="8" />
+    <div class="w-full h-screen px-6 py-4">
+      <h1 class="text-xl font-bold text-[#010109] mb-4">
+        Performance Insights
+      </h1>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <!-- Grade Comparison Chart -->
+        <div class="bg-white shadow-md rounded-lg p-6">
+          <h2 class="text-md font-semibold text-[#0050A8] mb-3">
+            Grade Comparison
+          </h2>
+          <canvas ref="chartCanvas"></canvas>
+        </div>
+
+        <!-- AI-Powered Study Recommendations -->
+        <div class="bg-white shadow-md rounded-lg p-6">
+          <h2 class="text-md font-semibold text-[#0050A8] mb-3">
+            AI Study Focus
+          </h2>
+          <p class="text-gray-600 text-sm">
+            Based on your past performance, AI suggests focusing on:
+          </p>
+          <ul class="mt-3 list-disc list-inside text-sm text-gray-700">
+            <li v-for="topic in studyRecommendations" :key="topic">
+              {{ topic }}
+            </li>
+          </ul>
+        </div>
       </div>
 
-      <div class="sm:w-[45%] lg:w-[20%] sm:mx-auto mt-auto w-[75%] mx-auto">
-        <ChartPie :chartData="chartDataPie" :chartOptions="chartOptionsPie" />
+      <!-- Resources -->
+      <div class="mt-8 bg-white shadow-md rounded-lg p-6">
+        <h2 class="text-md font-semibold text-[#0050A8] mb-3">
+          Recommended Learning Resources
+        </h2>
+        <ul class="list-disc list-inside text-sm text-gray-700">
+          <li v-for="resource in learningResources" :key="resource.title">
+            <a
+              :href="resource.link"
+              target="_blank"
+              class="text-blue-500 underline"
+            >
+              {{ resource.title }}
+            </a>
+          </li>
+        </ul>
       </div>
     </div>
 
@@ -121,6 +159,29 @@
       </div>
     </div>
 
+    <!-- Study Plan -->
+    <div class="bg-white shadow-md rounded-lg p-6">
+      <h2 class="text-md font-semibold text-[#0050A8] mb-3">
+        Your AI-Generated Study Plan
+      </h2>
+      <table class="w-full border-collapse border border-gray-200">
+        <thead>
+          <tr class="bg-[#F7F7F7]">
+            <th class="border p-2">Day</th>
+            <th class="border p-2">Subject</th>
+            <th class="border p-2">Focus Topic</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(plan, index) in studyPlan" :key="index">
+            <td class="border p-2">{{ plan.day }}</td>
+            <td class="border p-2">{{ plan.subject }}</td>
+            <td class="border p-2">{{ plan.topic }}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <!-- Contact Teacher -->
     <form class="w-full flex flex-col gap-y-4 mt-5 lg:w-[45%] lg:me-auto">
       <div class="w-full">
@@ -140,10 +201,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
-
+import Chart from "chart.js/auto";
 definePageMeta({
-  layout: "parent",
+  layout: "student",
 });
 
 const children = ref([
@@ -214,33 +274,69 @@ const alerts = ref(
   "John was absent 3 times last month. Please check with the school."
 );
 
-// chart option
-
-const chartDataPie = ref({
-  labels: ["score (50)", "Miss (50)"],
-  datasets: [
-    {
-      label: "Grade Distribution",
-      data: [1, 1], // You can modify this dynamically
-      backgroundColor: [
-        "#28A745", // Success Green
-        "#DC3545",
-      ],
-      borderWidth: 5,
-      borderColor: "#ffffff",
-      borderRadius: 10,
-    },
-  ],
+// Dummy Data for Grade Comparison Chart
+const grades = ref({
+  labels: ["Math", "Science", "English", "History", "Art"],
+  student: [85, 70, 78, 90, 88], // Your grades
+  classAverage: [80, 75, 85, 88, 82], // Class average
 });
 
-// Dynamic Chart Options
-const chartOptionsPie = ref({
-  responsive: true,
-  cutout: "60%",
-  plugins: {
-    legend: { position: "bottom" },
+// AI-Powered Study Recommendations
+const studyRecommendations = ref([
+  "Focus on Geometry in Math",
+  "Revise Biology topics",
+  "Improve reading comprehension in English",
+]);
+
+// Recommended Learning Resources
+const learningResources = ref([
+  { title: "Khan Academy Math", link: "https://www.khanacademy.org/math" },
+  {
+    title: "Biology Crash Course",
+    link: "https://www.youtube.com/c/crashcourse",
   },
+  { title: "English Writing Tips", link: "https://www.grammarly.com/blog/" },
+]);
+
+// Chart Setup
+const chartCanvas = ref(null);
+onMounted(() => {
+  if (chartCanvas.value) {
+    new Chart(chartCanvas.value.getContext("2d"), {
+      type: "bar",
+      data: {
+        labels: grades.value.labels,
+        datasets: [
+          {
+            label: "Your Grades",
+            data: grades.value.student,
+            backgroundColor: "rgba(0, 80, 168, 0.6)",
+          },
+          {
+            label: "Class Average",
+            data: grades.value.classAverage,
+            backgroundColor: "rgba(115, 115, 115, 0.6)",
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        plugins: { legend: { position: "bottom" } },
+      },
+    });
+  }
 });
+
+// AI Study Plan (Mock Data)
+const studyPlan = ref([
+  { day: "Monday", subject: "Math", topic: "Algebra Equations" },
+  { day: "Tuesday", subject: "English", topic: "Essay Writing" },
+  { day: "Wednesday", subject: "Biology", topic: "Human Anatomy" },
+  { day: "Thursday", subject: "Physics", topic: "Newton’s Laws" },
+  { day: "Friday", subject: "History", topic: "World War II" },
+  { day: "Saturday", subject: "Chemistry", topic: "Periodic Table" },
+  { day: "Sunday", subject: "Revision", topic: "Past Exam Papers" },
+]);
 </script>
 
 <style scoped>
