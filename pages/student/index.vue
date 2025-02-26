@@ -95,7 +95,12 @@
           <h2 class="text-md font-semibold text-[#0050A8] mb-3">
             Grade Comparison
           </h2>
-          <canvas ref="chartCanvas"></canvas>
+          <div class="w-full">
+            <ChartBar
+              :chartData="chartDataBar"
+              :chartOptions="chartOptionsBar"
+            />
+          </div>
         </div>
 
         <!-- AI-Powered Study Recommendations -->
@@ -134,7 +139,7 @@
     </div>
 
     <!-- AI Insights & Alerts -->
-    <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
       <div
         class="border border-[#F4F4FB] p-4 rounded-lg shadow flex gap-3 gap-x-4"
       >
@@ -160,16 +165,16 @@
     </div>
 
     <!-- Study Plan -->
-    <div class="bg-white shadow-md rounded-lg p-6">
+    <div class="w-full bg-white shadow-md rounded-lg p-6">
       <h2 class="text-md font-semibold text-[#0050A8] mb-3">
         Your AI-Generated Study Plan
       </h2>
       <table class="w-full border-collapse border border-gray-200">
         <thead>
           <tr class="bg-[#F7F7F7]">
-            <th class="border p-2">Day</th>
-            <th class="border p-2">Subject</th>
-            <th class="border p-2">Focus Topic</th>
+            <th class="border p-2 text-left">Day</th>
+            <th class="border p-2 text-left">Subject</th>
+            <th class="border p-2 text-left">Focus Topic</th>
           </tr>
         </thead>
         <tbody>
@@ -201,7 +206,6 @@
 </template>
 
 <script setup>
-import Chart from "chart.js/auto";
 definePageMeta({
   layout: "student",
 });
@@ -298,33 +302,38 @@ const learningResources = ref([
   { title: "English Writing Tips", link: "https://www.grammarly.com/blog/" },
 ]);
 
-// Chart Setup
-const chartCanvas = ref(null);
-onMounted(() => {
-  if (chartCanvas.value) {
-    new Chart(chartCanvas.value.getContext("2d"), {
-      type: "bar",
-      data: {
-        labels: grades.value.labels,
-        datasets: [
-          {
-            label: "Your Grades",
-            data: grades.value.student,
-            backgroundColor: "rgba(0, 80, 168, 0.6)",
-          },
-          {
-            label: "Class Average",
-            data: grades.value.classAverage,
-            backgroundColor: "rgba(115, 115, 115, 0.6)",
-          },
-        ],
-      },
-      options: {
-        responsive: true,
-        plugins: { legend: { position: "bottom" } },
-      },
-    });
-  }
+// chart data
+
+const chartDataBar = ref({
+  labels: ["Alice", "Bob", "Charlie", "David", "Eve"],
+  datasets: [
+    {
+      label: "Grades",
+      data: [85, 72, 90, 78, 92],
+      backgroundColor: "#F7F7F7",
+      borderRadius: 10,
+      barPercentage: 0.4,
+      categoryPercentage: 0.7,
+    },
+    {
+      label: "Actual Grades",
+      data: [85, 72, 90, 78, 92],
+      backgroundColor: "#0050AB",
+      borderRadius: 10,
+      barPercentage: 0.4,
+      categoryPercentage: 0.7,
+    },
+  ],
+});
+
+const chartOptionsBar = ref({
+  responsive: true,
+  maintainAspectRatio: false,
+  scales: {
+    x: { grid: { display: false } },
+    y: { beginAtZero: true, grid: { display: false } },
+  },
+  plugins: { legend: { display: false } },
 });
 
 // AI Study Plan (Mock Data)
@@ -337,6 +346,8 @@ const studyPlan = ref([
   { day: "Saturday", subject: "Chemistry", topic: "Periodic Table" },
   { day: "Sunday", subject: "Revision", topic: "Past Exam Papers" },
 ]);
+
+// chart data
 </script>
 
 <style scoped>
