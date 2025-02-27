@@ -112,18 +112,18 @@
       class="w-full right-0 left-0 sm:hidden fixed bottom-0 h-[70px] bg-[#F7F7F7] flex justify-around items-center py-3 z-50"
     >
       <NuxtLink
-        href="/parent"
+        href="/student"
         class="flex items-center flex-col gap-y-0 px-4 router-link-disable"
       >
         <img
-          v-if="$route.path == '/parent'"
+          v-if="$route.path == '/student'"
           src="~/assets/img/dashboard.svg"
           class="w-[29px]"
         />
         <img v-else src="~/assets/img/dashboard2.svg" class="w-[28px]" />
         <span
           :class="[
-            $route.path == '/parent' ? 'text-[#0050A8]' : 'text-[#737373]',
+            $route.path == '/student' ? 'text-[#0050A8]' : 'text-[#737373]',
           ]"
           class="Grotesque-Light text-xs sm:text-[12px]"
         >
@@ -133,7 +133,7 @@
 
       <NuxtLink
         href="/student/tracker"
-        class="w-full flex items-center gap-x-3 px-4"
+        class="flex items-center gap-x-0 flex-col router-link-disable px-4"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -141,7 +141,7 @@
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-5 h-5"
+          class="w-[29px]"
           :class="[
             $route.path.includes('/student/tracker')
               ? 'text-[#0050A8]'
@@ -161,7 +161,7 @@
               ? 'text-[#0050A8]'
               : 'text-[#737373]',
           ]"
-          class="Grotesque-Light text-xs sm:text-[14px]"
+          class="Grotesque-Light text-xs sm:text-[12px]"
         >
           Tracker
         </span>
@@ -172,14 +172,14 @@
         class="flex items-center gap-x-0 flex-col router-link-disable px-4"
       >
         <img
-          v-if="$route.path == '/parent/notifications'"
+          v-if="$route.path == '/student/notifications'"
           src="~/assets/img/bell.svg"
           class="w-[29px]"
         />
         <img v-else src="~/assets/img/bell2.svg" class="w-[29px]" />
         <span
           :class="[
-            $route.path == '/parent/notifications'
+            $route.path == '/student/notifications'
               ? 'text-[#0050A8]'
               : 'text-[#737373]',
           ]"

@@ -179,9 +179,9 @@
         </thead>
         <tbody>
           <tr v-for="(plan, index) in studyPlan" :key="index">
-            <td class="border p-2">{{ plan.day }}</td>
-            <td class="border p-2">{{ plan.subject }}</td>
-            <td class="border p-2">{{ plan.topic }}</td>
+            <td class="border p-2 text-sm">{{ plan.day }}</td>
+            <td class="border p-2 text-sm">{{ plan.subject }}</td>
+            <td class="border p-2 text-sm">{{ plan.topic }}</td>
           </tr>
         </tbody>
       </table>
