@@ -126,6 +126,17 @@ onMounted(() => {
     }
   });
 });
+
+const { $supabase } = useNuxtApp();
+
+async function fetchData() {
+  const { data, error } = await $supabase.from("test").select("*");
+  if (error) console.error(error);
+
+  console.log(data, "data");
+}
+
+fetchData();
 </script>
 
 <style>
