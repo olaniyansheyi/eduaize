@@ -9,8 +9,14 @@
 
 <script setup>
 import { useSearchStore } from "~/stores/search.js";
+import { useAuthStore } from "~/stores/auth";
+
+const authStore = useAuthStore();
 
 const searchStore = useSearchStore();
+onMounted(() => {
+  authStore.loadUser();
+});
 </script>
 
 <!-- You're building something awesome! Let’s break everything down step by step so you can move forward smoothly. 🚀  

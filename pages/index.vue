@@ -91,6 +91,7 @@
           >
         </p>
       </form>
+      <button @click="handleLogin">Create User</button>
     </div>
   </div>
 </template>
@@ -98,6 +99,9 @@
 <script setup>
 import eye from "~/assets/img/Eye.png";
 import eyeSlash from "~/assets/img/eye-slash.png";
+import { useAuthStore } from "~/stores/auth.js";
+
+const authStore = useAuthStore();
 
 const passwordVisible = ref(false);
 const password = ref("");
@@ -127,16 +131,31 @@ onMounted(() => {
   });
 });
 
-const { $supabase } = useNuxtApp();
-
-async function fetchData() {
-  const { data, error } = await $supabase.from("test").select("*");
-  if (error) console.error(error);
-
-  console.log(data, "data");
+async function handleLogin() {
+  await authStore.login({
+    email: "olaniyansheyi1704@gmail.com",
+    password: "12345678",
+  });
 }
 
-fetchData();
+async function handleSignUp() {
+  try {
+    const response = await authStore.signup({
+      fullName: "olaniyan oluwaseyi",
+      email: "olaniyansheyi1704@gmail.com",
+      password: "12345678",
+      address: "123 Elim Street",
+      role: "teacher",
+    });
+    if (response.error) {
+      console.log("error");
+    } else {
+      console.log("success");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+}
 </script>
 
 <style>
