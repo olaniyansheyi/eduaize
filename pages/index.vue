@@ -10,7 +10,10 @@
           </p>
         </div>
       </div>
-      <form class="w-full mt-6 flex flex-col gap-y-4">
+      <form
+        @submit.prevent="handleLogin"
+        class="w-full mt-6 flex flex-col gap-y-4"
+      >
         <div
           class="select-container w-full"
           :class="isOpen ? ' h-[10.5rem]' : ''"
@@ -48,6 +51,7 @@
 
           <input
             type="email"
+            required
             class="w-[280px] sm:w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1 pe-10"
             v-model="email"
           />
@@ -61,6 +65,7 @@
           <input
             v-model="password"
             :type="passwordVisible ? 'text' : 'password'"
+            required
             type="text"
             class="w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1 pe-10"
           />
@@ -91,28 +96,35 @@
           >
         </p>
       </form>
-      <button @click="handleLogin">Create User</button>
     </div>
   </div>
+  <Spinner v-if="isLoading" />
 </template>
 
 <script setup>
+import { useRouter } from "vue-router";
+import { useToast } from "vue-toastification";
 import eye from "~/assets/img/Eye.png";
 import eyeSlash from "~/assets/img/eye-slash.png";
 import { useAuthStore } from "~/stores/auth.js";
 
 const authStore = useAuthStore();
+const router = useRouter();
+const toast = useToast();
 
 const passwordVisible = ref(false);
-const password = ref("");
-const email = ref("");
+const password = ref("12345678");
+const email = ref("olaniyansheyi1704@gmail.com");
+
+const isOpen = ref(false);
+const selectedOption = ref("Teacher");
+const options = ref(["Teacher", "Admin", "Parent"]);
+
+const isLoading = ref(false);
 
 const togglePasswordVisibility = () => {
   passwordVisible.value = !passwordVisible.value;
 };
-const isOpen = ref(false);
-const selectedOption = ref("A teacher");
-const options = ref(["A Teacher", "School Admin", "As Parent"]);
 
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value;
@@ -121,6 +133,23 @@ const toggleDropdown = () => {
 const selectOption = (option) => {
   selectedOption.value = option;
   isOpen.value = false;
+
+  switch (option) {
+    case "Teacher":
+      email.value = "olaniyansheyi1704@gmail.com";
+      break;
+    case "Admin":
+      email.value = "jonasbenson1704@gmail.com";
+      break;
+    case "Parent":
+      email.value = "williamvictor1704@gmail.com";
+      break;
+    case "student":
+      email.value = "williamvjohn1704@gmail.com";
+      break;
+    default:
+      email.value = "olaniyansheyi1704@gmail.com";
+  }
 };
 
 onMounted(() => {
@@ -132,28 +161,24 @@ onMounted(() => {
 });
 
 async function handleLogin() {
-  await authStore.login({
-    email: "olaniyansheyi1704@gmail.com",
-    password: "12345678",
-  });
-}
+  isLoading.value = true;
 
-async function handleSignUp() {
   try {
-    const response = await authStore.signup({
-      fullName: "olaniyan oluwaseyi",
-      email: "olaniyansheyi1704@gmail.com",
-      password: "12345678",
-      address: "123 Elim Street",
-      role: "teacher",
+    const response = await authStore.login({
+      email: email.value,
+      password: password.value,
     });
-    if (response.error) {
-      console.log("error");
-    } else {
-      console.log("success");
+
+    if (authStore.error) {
+      throw new Error(authStore.error);
     }
+
+    toast.success("Login Successful!");
+    router.push(`/${selectedOption.value.toLowerCase()}`);
   } catch (error) {
-    console.log(error);
+    toast.error(`Login Failed: ${error.message}`);
+  } finally {
+    isLoading.value = false;
   }
 }
 </script>

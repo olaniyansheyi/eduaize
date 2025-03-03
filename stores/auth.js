@@ -50,58 +50,63 @@ export const useAuthStore = defineStore("auth", {
       const { $supabase } = useNuxtApp();
       this.loading = true;
       this.error = null;
-      let response;
 
       try {
-        // Sign in user
-        response = await $supabase.auth.signInWithPassword({ email, password });
+        const { data, error } = await $supabase.auth.signInWithPassword({
+          email,
+          password,
+        });
 
-        const { data, error } = response;
-        if (error) throw error;
+        if (error) throw error; // This ensures the error is thrown if login fails
 
         // Store session data
         if (data?.session) {
-          this.user = data.user; // Store in Pinia state
-          localStorage.setItem("user", JSON.stringify(data.user)); // Save in localStorage
+          this.user = data.user;
+          localStorage.setItem("user", JSON.stringify(data.user));
         }
 
-        // Fetch user metadata from auth
+        // Fetch user metadata
         const { data: userData, error: userError } =
           await $supabase.auth.getUser();
         if (userError) throw userError;
 
-        // Extract user metadata from the auth object
         this.userDetails = userData?.user?.user_metadata || null;
-
-        // Save user metadata in localStorage
         localStorage.setItem("userDetails", JSON.stringify(this.userDetails));
-
-        console.log("User Metadata:", this.userDetails);
+        console.log(this.userDetails, this.user);
       } catch (error) {
+        console.error("Login Error:", error.message);
         this.error = error.message;
+        throw error; // Rethrow error so `handleLogin` can catch it
       } finally {
         this.loading = false;
       }
-
-      return response;
     },
 
     async logout() {
-      const { $supabase } = useNuxtApp();
+      const { $supabase, $toast } = useNuxtApp();
       this.loading = true;
-      let response;
+      this.error = null;
+
       try {
-        response = await $supabase.auth.signOut();
-        const { error } = response;
+        const { error } = await $supabase.auth.signOut();
         if (error) throw error;
+
         this.user = null;
+        this.userDetails = null;
+        localStorage.removeItem("user");
+        localStorage.removeItem("userDetails");
+
+        $toast.success("Logout Successful!");
+        navigateTo("/");
+        console.log(this.userDetails, this.user);
       } catch (error) {
         this.error = error.message;
+        $toast.error(`Logout Failed: ${error.message}`);
       } finally {
         this.loading = false;
       }
-      return response;
     },
+
     async getCurrentUser() {
       const { $supabase } = useNuxtApp();
       this.loading = true;

@@ -3,6 +3,9 @@ export default defineNuxtConfig({
   modules: ["@nuxtjs/tailwindcss", "@pinia/nuxt"],
   compatibilityDate: "2024-11-01",
   devtools: { enabled: true },
+  build: {
+    transpile: ["vue-toastification"],
+  },
   css: ["~/assets/css/main.css"],
   runtimeConfig: {
     public: {
@@ -10,5 +13,8 @@ export default defineNuxtConfig({
       supabaseKey: process.env.SUPABASE_KEY,
     },
   },
-  plugins: [{ src: "~/plugins/supabase.js", mode: "client" }],
+  plugins: [
+    { src: "~/plugins/supabase.js", mode: "client" },
+    "~/plugins/vue-toastification",
+  ],
 });
