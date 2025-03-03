@@ -188,6 +188,26 @@ definePageMeta({
   middleware: "auth",
 });
 
+// 🟢 Reactive state to hold user info
+const userDetails = ref(null);
+
+// 🟢 Function to load user from localStorage
+const loadUserFromLocalStorage = () => {
+  if (process.client) {
+    const storedUser = localStorage.getItem("user");
+
+    if (storedUser) {
+      userDetails.value = JSON.parse(storedUser);
+      console.log(userDetails.value);
+    }
+  }
+};
+
+// Fetch user data when component mounts
+onMounted(() => {
+  loadUserFromLocalStorage();
+});
+
 const isOpen = ref(false);
 
 onMounted(() => {
