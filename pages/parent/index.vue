@@ -135,6 +135,7 @@ import { ref, computed } from "vue";
 
 definePageMeta({
   layout: "parent",
+  middleware: "auth",
 });
 
 const children = ref([

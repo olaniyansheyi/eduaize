@@ -15,7 +15,13 @@ const authStore = useAuthStore();
 
 const searchStore = useSearchStore();
 onMounted(() => {
-  authStore.loadUser();
+  if (process.client) {
+    authStore.loadUser(); // This will now work only on the client
+
+    if (authStore.user) {
+      authStore.getCurrentUser();
+    }
+  }
 });
 </script>
 

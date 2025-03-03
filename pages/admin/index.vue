@@ -114,5 +114,6 @@ const chartOptions = ref({
 
 definePageMeta({
   layout: "admin",
+  middleware: "auth",
 });
 </script>

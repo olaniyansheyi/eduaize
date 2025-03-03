@@ -185,6 +185,7 @@ import personImg from "~/assets/img/person.png";
 
 definePageMeta({
   layout: "teacher",
+  middleware: "auth",
 });
 
 const isOpen = ref(false);

@@ -208,6 +208,7 @@
 <script setup>
 definePageMeta({
   layout: "student",
+  middleware: "auth",
 });
 
 const children = ref([
