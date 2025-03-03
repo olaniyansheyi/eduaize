@@ -163,14 +163,14 @@
           </span>
         </NuxtLink>
 
-        <NuxtLink to="/" class="me-auto">
+        <div @click="handleLogout" class="me-auto">
           <div class="w-full flex items-center gap-x-3 px-4 mt-40">
             <img src="~/assets/img/logout.svg" class="w-5" />
             <span class="Grotesque-Light text-[#737373] text-xs sm:text-[14px]">
               Logout
             </span>
           </div>
-        </NuxtLink>
+        </div>
       </div>
     </div>
 
@@ -179,16 +179,16 @@
     <!-- sidebar section-mobile-display -->
 
     <div
-      class="w-full right-0 left-0 sm:hidden fixed bottom-0 h-[70px] bg-[#F7F7F7] flex justify-around items-center py-3 z-50"
+      class="max-w-full right-0 left-0 sm:hidden fixed bottom-0 h-[70px] bg-[#F7F7F7] flex justify-around items-center py-3 px-2 z-50"
     >
       <NuxtLink
         href="/admin"
-        class="w-full flex items-center flex-col gap-y-0 px-4 router-link-disable"
+        class="w-[16%] flex items-center flex-col gap-y-0 px-4 router-link-disable"
       >
         <img
           v-if="$route.path == '/admin'"
           src="~/assets/img/dashboard.svg"
-          class="w-[29px]"
+          class="w-[24px]"
         />
         <img v-else src="~/assets/img/dashboard2.svg" class="w-[28px]" />
         <span
@@ -203,7 +203,7 @@
 
       <NuxtLink
         href="/admin/export-report"
-        class="w-full flex items-center gap-x-0 flex-col router-link-disable px-4"
+        class="flex w-[16%] items-center gap-x-0 flex-col router-link-disable px-4"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -211,7 +211,7 @@
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-[29px]"
+          class="w-[24px]"
           :class="[
             $route.path == '/admin/export-report'
               ? 'text-[#0050A8]'
@@ -233,12 +233,12 @@
           ]"
           class="Grotesque-Light text-xs sm:text-[12px]"
         >
-          Export Report
+          Export
         </span>
       </NuxtLink>
       <NuxtLink
         href="/admin/manage-teacher"
-        class="w-full flex items-center flex-col router-link-disable px-4"
+        class="flex w-[16%] items-center flex-col router-link-disable px-4"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -246,7 +246,7 @@
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-[29px]"
+          class="w-[24px]"
           :class="[
             $route.path.includes('/admin/manage-teacher')
               ? 'text-[#0050A8]'
@@ -274,7 +274,7 @@
 
       <NuxtLink
         href="/admin/student-performance/all"
-        class="w-full flex items-center flex-col router-link-disable px-4"
+        class="flex w-[16%] items-center flex-col router-link-disable px-4"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -282,7 +282,7 @@
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-[29px]"
+          class="w-[24px]"
           :class="[
             $route.path.includes('/admin/student-performance')
               ? 'text-[#0050A8]'
@@ -310,14 +310,14 @@
 
       <NuxtLink
         href="/admin/notifications"
-        class="w-full flex items-center gap-x-0 flex-col router-link-disable px-4"
+        class="flex w-[16%] items-center gap-x-0 flex-col router-link-disable px-4"
       >
         <img
           v-if="$route.path == '/admin/notifications'"
           src="~/assets/img/bell.svg"
-          class="w-[29px]"
+          class="w-[24px]"
         />
-        <img v-else src="~/assets/img/bell2.svg" class="w-[29px]" />
+        <img v-else src="~/assets/img/bell2.svg" class="w-[24px]" />
         <span
           :class="[
             $route.path == '/admin/notifications'
@@ -329,6 +329,16 @@
           Alerts
         </span>
       </NuxtLink>
+
+      <div
+        @click="handleLogout"
+        class="flex w-[16%] items-center gap-x-0 flex-col router-link-disable px-4"
+      >
+        <img src="~/assets/img/logout.svg" class="w-[24px]" />
+        <span class="Grotesque-Light text-[#737373] text-xs sm:text-[14px]">
+          Logout
+        </span>
+      </div>
     </div>
 
     <!-- header -->
@@ -389,6 +399,13 @@
 
 <script setup>
 import { useSearchStore } from "~/stores/search";
+import { useAuthStore } from "~/stores/auth.js";
+
+const authStore = useAuthStore();
+
+async function handleLogout() {
+  await authStore.logout();
+}
 
 const searchStore = useSearchStore();
 </script>

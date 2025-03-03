@@ -128,14 +128,14 @@
           </span>
         </NuxtLink>
 
-        <NuxtLink to="/" class="me-auto">
+        <div @click="handleLogout" class="me-auto">
           <div class="w-full flex items-center gap-x-3 px-4 mt-40">
             <img src="~/assets/img/logout.svg" class="w-5" />
             <span class="Grotesque-Light text-[#737373] text-xs sm:text-[14px]">
               Logout
             </span>
           </div>
-        </NuxtLink>
+        </div>
       </div>
     </div>
 
@@ -144,7 +144,7 @@
     <!-- sidebar section-mobile-display -->
 
     <div
-      class="w-full right-0 left-0 sm:hidden fixed bottom-0 h-[70px] bg-[#F7F7F7] flex justify-around items-center py-3 z-50"
+      class="w-full right-0 left-0 sm:hidden fixed bottom-0 h-[70px] bg-[#F7F7F7] flex justify-center gap-x-0 items-center py-3 z-50"
     >
       <NuxtLink
         href="/teacher"
@@ -153,7 +153,7 @@
         <img
           v-if="$route.path == '/teacher'"
           src="~/assets/img/dashboard.svg"
-          class="w-[29px]"
+          class="w-[25px]"
         />
         <img v-else src="~/assets/img/dashboard2.svg" class="w-[28px]" />
         <span
@@ -176,7 +176,7 @@
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-[29px]"
+          class="w-[25px]"
           :class="[
             $route.path == '/teacher/grades'
               ? 'text-[#0050A8]'
@@ -211,7 +211,7 @@
           viewBox="0 0 24 24"
           stroke-width="1.5"
           stroke="currentColor"
-          class="w-[29px]"
+          class="w-[25px]"
           :class="[
             $route.path.includes('/teacher/student-performance')
               ? 'text-[#0050A8]'
@@ -244,9 +244,9 @@
         <img
           v-if="$route.path == '/teacher/notifications'"
           src="~/assets/img/bell.svg"
-          class="w-[29px]"
+          class="w-[25px]"
         />
-        <img v-else src="~/assets/img/bell2.svg" class="w-[29px]" />
+        <img v-else src="~/assets/img/bell2.svg" class="w-[25px]" />
         <span
           :class="[
             $route.path == '/teacher/notifications'
@@ -258,6 +258,17 @@
           Alerts
         </span>
       </NuxtLink>
+
+      <div @click="handleLogout" class="">
+        <div
+          class="flex items-center gap-x-0 flex-col router-link-disable px-4"
+        >
+          <img src="~/assets/img/logout.svg" class="w-[29px]" />
+          <span class="Grotesque-Light text-[#737373] text-xs sm:text-[14px]">
+            Logout
+          </span>
+        </div>
+      </div>
     </div>
 
     <!-- header -->
@@ -318,6 +329,13 @@
 
 <script setup>
 import { useSearchStore } from "~/stores/search";
+import { useAuthStore } from "~/stores/auth.js";
+
+const authStore = useAuthStore();
+
+async function handleLogout() {
+  await authStore.logout();
+}
 
 const searchStore = useSearchStore();
 </script>

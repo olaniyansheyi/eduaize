@@ -93,14 +93,14 @@
           </span>
         </NuxtLink>
 
-        <NuxtLink to="/" class="me-auto">
+        <div @click="handleLogout" class="me-auto">
           <div class="w-full flex items-center gap-x-3 px-4 mt-40">
             <img src="~/assets/img/logout.svg" class="w-5" />
             <span class="Grotesque-Light text-[#737373] text-xs sm:text-[14px]">
               Logout
             </span>
           </div>
-        </NuxtLink>
+        </div>
       </div>
     </div>
 
@@ -189,7 +189,7 @@
         </span>
       </NuxtLink>
 
-      <NuxtLink to="/" class="">
+      <div @click="handleLogout" class="">
         <div
           class="flex items-center gap-x-0 flex-col router-link-disable px-4"
         >
@@ -198,7 +198,7 @@
             Logout
           </span>
         </div>
-      </NuxtLink>
+      </div>
     </div>
 
     <!-- header -->
@@ -259,6 +259,13 @@
 
 <script setup>
 import { useSearchStore } from "~/stores/search";
+import { useAuthStore } from "~/stores/auth.js";
+
+const authStore = useAuthStore();
+
+async function handleLogout() {
+  await authStore.logout();
+}
 
 const searchStore = useSearchStore();
 </script>
