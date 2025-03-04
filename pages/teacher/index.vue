@@ -67,10 +67,11 @@
             >
               <p class="text-[#010109] text-sm">100</p>
               <h3 class="me-auto Grotesque-Regular text-[#737373] text-xs">
-                Toatal sudent
+                Total Students
               </h3>
             </div>
           </div>
+
           <div
             class="rounded-xl py flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-[47%] sm:gap-x-0 lg:w-[22%]"
           >
@@ -84,10 +85,11 @@
             >
               <p class="text-[#010109] text-sm">5</p>
               <h3 class="me-auto Grotesque-Regular text-[#737373] text-xs">
-                Toatal subject Assigned
+                Total Classes Assigned
               </h3>
             </div>
           </div>
+
           <div
             class="rounded-xl py flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-[47%] sm:gap-x-0 lg:w-[22%]"
           >
@@ -99,12 +101,13 @@
             <div
               class="flex justify-start items-start flex-col gap-y-1 me-auto"
             >
-              <p class="text-[#010109] text-sm">100</p>
+              <p class="text-[#010109] text-sm">5</p>
               <h3 class="me-auto Grotesque-Regular text-[#737373] text-xs">
-                Toatal sudent
+                Total Subjects Assigned
               </h3>
             </div>
           </div>
+
           <div
             class="rounded-xl py flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 pe-16 w-full sm:w-[47%] sm:gap-x-0 lg:w-[22%]"
           >
@@ -116,9 +119,9 @@
             <div
               class="flex justify-start items-start flex-col gap-y-1 me-auto"
             >
-              <p class="text-[#010109] text-sm">100</p>
+              <p class="text-red-500 text-sm font-bold">12</p>
               <h3 class="me-auto Grotesque-Regular text-[#737373] text-xs">
-                Toatal sudent
+                Total Student At Risk
               </h3>
             </div>
           </div>
@@ -188,10 +191,8 @@ definePageMeta({
   middleware: "auth",
 });
 
-// 🟢 Reactive state to hold user info
 const userDetails = ref(null);
 
-// 🟢 Function to load user from localStorage
 const loadUserFromLocalStorage = () => {
   if (process.client) {
     const storedUser = localStorage.getItem("user");
