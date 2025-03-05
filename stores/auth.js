@@ -245,5 +245,28 @@ export const useAuthStore = defineStore("auth", {
         this.loading = false;
       }
     },
+
+    async addScore(scoreData) {
+      const { $supabase } = useNuxtApp();
+      this.loading = true;
+      this.error = null;
+
+      try {
+        const { data, error } = await $supabase
+          .from("scores")
+          .insert([scoreData]);
+
+        if (error) throw error;
+
+        return data;
+      } catch (error) {
+        console.error("Add Score Error:", error.message);
+        this.error = error.message;
+
+        throw error;
+      } finally {
+        this.loading = false;
+      }
+    },
   },
 });

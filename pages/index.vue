@@ -96,6 +96,8 @@
           >
         </p>
       </form>
+
+      <button @click="handleAddScore">create Score</button>
     </div>
   </div>
   <Spinner v-if="isLoading" />
@@ -177,6 +179,86 @@ async function handleLogin() {
     router.push(`/${selectedOption.value.toLowerCase()}`);
   } catch (error) {
     toast.error(`Login Failed: ${error.message}`);
+  } finally {
+    isLoading.value = false;
+  }
+}
+
+async function handleAddScore() {
+  isLoading.value = true;
+
+  const scoreData = {
+    student_details: {
+      name: "enyi vivian",
+      email: "enyivivian1704@gmail.com",
+      studentId: "2020-0009",
+      class: "Grade 8A-Science",
+    },
+    subjects: {
+      English: {
+        term_1_scores: [30, 25, 28],
+        term_2_scores: [20, 15, 18],
+        average_term_1: 27,
+        average_term_2: 18,
+        attendance: { term_1: 5, term_2: 3 },
+        teacher_remark: {
+          term_1: "Weak in comprehension",
+          term_2: "Struggling with basic grammar",
+        },
+      },
+      Math: {
+        term_1_scores: [15, 12, 18],
+        term_2_scores: [10, 8, 12],
+        average_term_1: 15,
+        average_term_2: 10,
+        attendance: { term_1: 4, term_2: 3 },
+        teacher_remark: {
+          term_1: "Poor arithmetic skills",
+          term_2: "Needs intensive remedial sessions",
+        },
+      },
+      Physics: {
+        term_1_scores: [22, 20, 18],
+        term_2_scores: [18, 15, 12],
+        average_term_1: 20,
+        average_term_2: 15,
+        attendance: { term_1: 6, term_2: 5 },
+        teacher_remark: {
+          term_1: "Struggles with experiments",
+          term_2: "Fails to grasp key concepts",
+        },
+      },
+      Biology: {
+        term_1_scores: [25, 22, 20],
+        term_2_scores: [18, 16, 15],
+        average_term_1: 22,
+        average_term_2: 16,
+        attendance: { term_1: 5, term_2: 4 },
+        teacher_remark: {
+          term_1: "Needs to focus on theory",
+          term_2: "Struggles with memorization",
+        },
+      },
+      History: {
+        term_1_scores: [30, 28, 25],
+        term_2_scores: [22, 18, 20],
+        average_term_1: 28,
+        average_term_2: 20,
+        attendance: { term_1: 6, term_2: 5 },
+        teacher_remark: {
+          term_1: "Does not participate in discussions",
+          term_2: "Weak retention of historical events",
+        },
+      },
+    },
+    created_at: new Date().toISOString(),
+  };
+
+  try {
+    await authStore.addScore(scoreData);
+    toast.success("Score added successfully!");
+  } catch (error) {
+    toast.error(`Failed to add score: ${error.message}`);
   } finally {
     isLoading.value = false;
   }
