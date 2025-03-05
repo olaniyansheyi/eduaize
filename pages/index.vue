@@ -118,7 +118,7 @@ const email = ref("olaniyansheyi1704@gmail.com");
 
 const isOpen = ref(false);
 const selectedOption = ref("Teacher");
-const options = ref(["Teacher", "Admin", "Parent"]);
+const options = ref(["Teacher", "Admin", "Parent", "student"]);
 
 const isLoading = ref(false);
 
@@ -145,7 +145,7 @@ const selectOption = (option) => {
       email.value = "williamvictor1704@gmail.com";
       break;
     case "student":
-      email.value = "williamvjohn1704@gmail.com";
+      email.value = "williamjohn1704@gmail.com";
       break;
     default:
       email.value = "olaniyansheyi1704@gmail.com";
