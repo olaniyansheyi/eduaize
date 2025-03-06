@@ -16,28 +16,21 @@
           <img :src="personImg" class="w-[80px] h-[80px] rounded-full" alt="" />
           <div class="h-full flex justify-start items-start flex-col gap-y-2">
             <h3 class="me-auto Grotesque-Regular text-md text-[#010109]">
-              john Anetor
+              {{ userDetails.fullName }}
             </h3>
             <div class="flex justify-start items-start flex-col gap-y-1">
               <p class="text-[#737373] text-sm">ID</p>
               <h3 class="me-auto Grotesque-Regular text-sm text-[#010109]">
-                ID: 2020-0001
+                ID: {{ userDetails.id }}
               </h3>
             </div>
           </div>
-          <div class="mt-auto sm:ms-auto lg:ms-0">
-            <div class="flex justify-start items-start flex-col gap-y-1">
-              <p class="text-[#737373] text-sm">Number</p>
-              <h3 class="me-auto Grotesque-Regular text-sm text-[#010109]">
-                +2348135158754
-              </h3>
-            </div>
-          </div>
+
           <div class="mt-auto">
             <div class="flex justify-start items-start flex-col gap-y-1">
               <p class="text-[#737373] text-sm">Email</p>
               <h3 class="me-auto Grotesque-Regular text-sm text-[#010109]">
-                olaniyansheyi1704@gmail.com
+                {{ userDetails.email }}
               </h3>
             </div>
           </div>
@@ -45,7 +38,7 @@
             <div class="flex justify-start items-start flex-col gap-y-1">
               <p class="text-[#737373] text-sm">Address</p>
               <h3 class="me-auto Grotesque-Regular text-sm text-[#010109]">
-                123 Elim Street
+                {{ userDetails.address }}
               </h3>
             </div>
           </div>
@@ -185,21 +178,38 @@
 // temporal data for the roles
 
 import personImg from "~/assets/img/person.png";
+import { useAuthStore } from "~/stores/auth.js";
+
+// console.log(authStore.user);
 
 definePageMeta({
   layout: "teacher",
   middleware: "auth",
 });
 
-const userDetails = ref(null);
+const userDetails = ref({
+  id: "",
+  email: "",
+  address: "",
+  fullName: "",
+});
 
 const loadUserFromLocalStorage = () => {
   if (process.client) {
     const storedUser = localStorage.getItem("user");
 
     if (storedUser) {
-      userDetails.value = JSON.parse(storedUser);
-      console.log(userDetails.value);
+      const userData = JSON.parse(storedUser);
+
+      // Extract first numbers before '-' in the ID
+      const userId = userData.id.split("-")[0];
+
+      userDetails.value = {
+        id: userId,
+        email: userData.user_metadata?.email || "N/A",
+        address: userData.user_metadata?.address || "N/A",
+        fullName: userData.user_metadata?.fullName || "N/A",
+      };
     }
   }
 };

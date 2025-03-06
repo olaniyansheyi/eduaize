@@ -96,8 +96,6 @@
           >
         </p>
       </form>
-
-      <button @click="handleAddScore">create Score</button>
     </div>
   </div>
   <Spinner v-if="isLoading" />
@@ -184,85 +182,85 @@ async function handleLogin() {
   }
 }
 
-async function handleAddScore() {
-  isLoading.value = true;
+// async function handleAddScore() {
+//   isLoading.value = true;
 
-  const scoreData = {
-    student_details: {
-      name: "john wick",
-      email: "johnwick1704@gmail.com",
-      studentId: "2020-0020",
-      class: "Grade 10B-Science",
-    },
-    subjects: {
-      English: {
-        term_1_scores: [90, 92, 95],
-        term_2_scores: [96, 98, 100],
-        average_term_1: 92,
-        average_term_2: 98,
-        attendance: { term_1: 10, term_2: 10 },
-        teacher_remark: {
-          term_1: "Outstanding comprehension skills",
-          term_2: "Mastery of advanced grammar",
-        },
-      },
-      Math: {
-        term_1_scores: [95, 96, 98],
-        term_2_scores: [99, 100, 100],
-        average_term_1: 96,
-        average_term_2: 100,
-        attendance: { term_1: 10, term_2: 10 },
-        teacher_remark: {
-          term_1: "Brilliant problem solver",
-          term_2: "Excels in complex problem-solving",
-        },
-      },
-      Physics: {
-        term_1_scores: [80, 82, 85],
-        term_2_scores: [87, 89, 92],
-        average_term_1: 82,
-        average_term_2: 89,
-        attendance: { term_1: 9, term_2: 9 },
-        teacher_remark: {
-          term_1: "Engages well in practical work",
-          term_2: "Understands theoretical concepts thoroughly",
-        },
-      },
-      Biology: {
-        term_1_scores: [85, 88, 84],
-        term_2_scores: [89, 90, 92],
-        average_term_1: 85,
-        average_term_2: 90,
-        attendance: { term_1: 9, term_2: 9 },
-        teacher_remark: {
-          term_1: "Good knowledge of biological concepts",
-          term_2: "Strong retention and recall ability",
-        },
-      },
-      History: {
-        term_1_scores: [88, 90, 86],
-        term_2_scores: [92, 94, 95],
-        average_term_1: 88,
-        average_term_2: 94,
-        attendance: { term_1: 9, term_2: 9 },
-        teacher_remark: {
-          term_1: "Active in class discussions",
-          term_2: "Great understanding of historical facts",
-        },
-      },
-    },
-    created_at: new Date().toISOString(),
-  };
+//   const scoreData = {
+//     student_details: {
+//       name: "john wick",
+//       email: "johnwick1704@gmail.com",
+//       studentId: "2020-0020",
+//       class: "Grade 10B-Science",
+//     },
+//     subjects: {
+//       English: {
+//         term_1_scores: [90, 92, 95],
+//         term_2_scores: [96, 98, 100],
+//         average_term_1: 92,
+//         average_term_2: 98,
+//         attendance: { term_1: 10, term_2: 10 },
+//         teacher_remark: {
+//           term_1: "Outstanding comprehension skills",
+//           term_2: "Mastery of advanced grammar",
+//         },
+//       },
+//       Math: {
+//         term_1_scores: [95, 96, 98],
+//         term_2_scores: [99, 100, 100],
+//         average_term_1: 96,
+//         average_term_2: 100,
+//         attendance: { term_1: 10, term_2: 10 },
+//         teacher_remark: {
+//           term_1: "Brilliant problem solver",
+//           term_2: "Excels in complex problem-solving",
+//         },
+//       },
+//       Physics: {
+//         term_1_scores: [80, 82, 85],
+//         term_2_scores: [87, 89, 92],
+//         average_term_1: 82,
+//         average_term_2: 89,
+//         attendance: { term_1: 9, term_2: 9 },
+//         teacher_remark: {
+//           term_1: "Engages well in practical work",
+//           term_2: "Understands theoretical concepts thoroughly",
+//         },
+//       },
+//       Biology: {
+//         term_1_scores: [85, 88, 84],
+//         term_2_scores: [89, 90, 92],
+//         average_term_1: 85,
+//         average_term_2: 90,
+//         attendance: { term_1: 9, term_2: 9 },
+//         teacher_remark: {
+//           term_1: "Good knowledge of biological concepts",
+//           term_2: "Strong retention and recall ability",
+//         },
+//       },
+//       History: {
+//         term_1_scores: [88, 90, 86],
+//         term_2_scores: [92, 94, 95],
+//         average_term_1: 88,
+//         average_term_2: 94,
+//         attendance: { term_1: 9, term_2: 9 },
+//         teacher_remark: {
+//           term_1: "Active in class discussions",
+//           term_2: "Great understanding of historical facts",
+//         },
+//       },
+//     },
+//     created_at: new Date().toISOString(),
+//   };
 
-  try {
-    await authStore.addScore(scoreData);
-    toast.success("Score added successfully!");
-  } catch (error) {
-    toast.error(`Failed to add score: ${error.message}`);
-  } finally {
-    isLoading.value = false;
-  }
-}
+//   try {
+//     await authStore.addScore(scoreData);
+//     toast.success("Score added successfully!");
+//   } catch (error) {
+//     toast.error(`Failed to add score: ${error.message}`);
+//   } finally {
+//     isLoading.value = false;
+//   }
+// }
 </script>
 
 <style>

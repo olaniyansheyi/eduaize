@@ -72,7 +72,6 @@ export const useAuthStore = defineStore("auth", {
 
         this.userDetails = userData?.user?.user_metadata || null;
         localStorage.setItem("userDetails", JSON.stringify(this.userDetails));
-        console.log(this.userDetails, this.user);
       } catch (error) {
         console.error("Login Error:", error.message);
         this.error = error.message;
