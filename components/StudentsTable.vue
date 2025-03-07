@@ -231,7 +231,7 @@
         </div>
         <div class="flex flex-col gap-y-1 justify-center items-center w-full">
           <button
-            @click="closeModal"
+            @click="deleteStudent()"
             class="bg-[#EF3333] py-2 w-full text-white rounded-lg Grotesque-Regular"
           >
             Yes, please
@@ -467,5 +467,10 @@ const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--;
 };
 
-console.log(studentStore.students);
+// console.log(studentStore.students);
+
+const deleteStudent = (student) => {
+  studentStore.deleteStudent(student.id);
+  closeModal();
+};
 </script>
