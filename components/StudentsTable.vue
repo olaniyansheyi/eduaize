@@ -80,7 +80,7 @@
 
       <!-- Row with dropdown -->
       <div
-        v-for="(student, index) in filteredStudents"
+        v-for="(student, index) in paginatedStudents"
         :key="index"
         class="flex justify-between border-b items-center border-b-[#E9E5E5] w-[1000px] px-5 relative py-2"
       >
@@ -165,9 +165,10 @@
           Rows per page
         </p>
         <select
+          v-model="itemsPerPage"
           class="w-[64px] h-[32px] border-[1px] border-[#E9E5E5] rounded-lg outline-none px-1 cursor-pointer text-[#737373] Grotesque-Regular text-[14px]"
         >
-          <option value="10">10</option>
+          <option value="12">12</option>
           <option value="20">20</option>
           <option value="30">30</option>
         </select>
@@ -175,42 +176,44 @@
 
       <div class="flex justify-start items-center gap-x-1 flex-wrap gap-y-5">
         <button
+          @click="currentPage = 1"
+          :disabled="currentPage === 1"
+          :class="currentPage === 1 ? 'bg-[#0050A8] text-white' : ''"
           class="border-[1px] border-[#E9E5E5] rounded-lg px-4 py-1 cursor-pointer text-[#737373] Grotesque-Regular text-[14px]"
         >
           First
         </button>
         <button
+          @click="prevPage"
+          :disabled="currentPage === 1"
           class="border-[1px] border-[#E9E5E5] rounded-lg px-4 py-1 cursor-pointer text-[#737373] Grotesque-Regular text-[14px]"
         >
-          Previuos
+          Previous
         </button>
+
+        <span class="text-[#737373] Grotesque-Regular text-[14px]">
+          Page {{ currentPage }} of {{ totalPages }}
+        </span>
+
         <button
-          class="border-[1px] border-[#E9E5E5] rounded-lg px-4 py-1 cursor-pointer text-[#737373] Grotesque-Regular text-[14px]"
-        >
-          1
-        </button>
-        <button
-          class="bg-[#0050AB] rounded-lg px-4 py-1 cursor-pointer text-white Grotesque-Regular text-[14px]"
-        >
-          2
-        </button>
-        <button
-          class="border-[1px] border-[#E9E5E5] rounded-lg px-4 py-1 cursor-pointer text-[#737373] Grotesque-Regular text-[14px]"
-        >
-          ....
-        </button>
-        <button
+          @click="nextPage"
+          :disabled="currentPage === totalPages"
           class="border-[1px] border-[#E9E5E5] rounded-lg px-4 py-1 cursor-pointer text-[#737373] Grotesque-Regular text-[14px]"
         >
           Next
         </button>
         <button
+          @click="currentPage = totalPages"
+          :disabled="currentPage === totalPages"
           class="border-[1px] border-[#E9E5E5] rounded-lg px-4 py-1 cursor-pointer text-[#737373] Grotesque-Regular text-[14px]"
+          :class="currentPage === totalPages ? 'bg-[#0050A8] text-white' : ''"
         >
           Last
         </button>
         <p class="text-[#737373] Grotesque-Regular text-[14px] lg:ms-2">
-          1-10 of 346 Results
+          Showing {{ (currentPage - 1) * itemsPerPage + 1 }} -
+          {{ Math.min(currentPage * itemsPerPage, filteredStudents.length) }}
+          of {{ filteredStudents.length }} results
         </p>
       </div>
     </div>
@@ -423,4 +426,30 @@ const filteredStudents = computed(() => {
   }
   return students.value; // Show all
 });
+
+// pagionation implementation
+
+const currentPage = ref(1);
+const itemsPerPage = 12;
+
+// Compute total pages
+const totalPages = computed(() =>
+  Math.ceil(filteredStudents.value.length / itemsPerPage)
+);
+
+// Get paginated students
+const paginatedStudents = computed(() => {
+  const start = (currentPage.value - 1) * itemsPerPage;
+  const end = start + itemsPerPage;
+  return filteredStudents.value.slice(start, end);
+});
+
+// Pagination controls
+const nextPage = () => {
+  if (currentPage.value < totalPages.value) currentPage.value++;
+};
+
+const prevPage = () => {
+  if (currentPage.value > 1) currentPage.value--;
+};
 </script>

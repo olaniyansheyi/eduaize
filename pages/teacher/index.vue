@@ -179,7 +179,6 @@
 // temporal data for the roles
 
 import personImg from "~/assets/img/person.png";
-import { useAuthStore } from "~/stores/auth.js";
 
 import { useStudentStore } from "~/stores/student";
 
@@ -267,8 +266,8 @@ const chartOptionsPie = ref({
 });
 
 const isOpenFilterChart = ref(false);
-const selectedOption = ref("Last Term");
-const options = ref(["Last Term", "Upper Last Term"]);
+const options = ref(["Term 1", "Term 2"]);
+const selectedOption = ref("Term 1");
 
 const toggleDropdown = () => {
   isOpenFilterChart.value = !isOpenFilterChart.value;
@@ -298,26 +297,22 @@ const chartDataBar = computed(() => {
   const labels = studentStore.students.map(
     (student) => student.student_details.name
   );
-  const term1Scores = studentStore.students.map(
-    (student) => student.subjects.Math?.average_term_1 || 0
-  );
-  const term2Scores = studentStore.students.map(
-    (student) => student.subjects.Math?.average_term_2 || 0
+
+  const isTerm1 = selectedOption.value === "Term 1";
+
+  const scores = studentStore.students.map((student) =>
+    isTerm1
+      ? student.subjects.Math?.average_term_1 || 0
+      : student.subjects.Math?.average_term_2 || 0
   );
 
   return {
     labels,
     datasets: [
       {
-        label: "Term 1 Scores",
-        data: term1Scores,
-        backgroundColor: "#0050AB",
-        borderRadius: 10,
-      },
-      {
-        label: "Term 2 Scores",
-        data: term2Scores,
-        backgroundColor: "#6495ED",
+        label: isTerm1 ? "Term 1 Scores" : "Term 2 Scores",
+        data: scores,
+        backgroundColor: isTerm1 ? "#0050AB" : "#6495ED",
         borderRadius: 10,
       },
     ],
@@ -326,9 +321,12 @@ const chartDataBar = computed(() => {
 
 const chartDataPie = computed(() => {
   const grades = { A: 0, B: 0, C: 0, D: 0, F: 0 };
+  const isTerm1 = selectedOption.value === "Term 1";
+
   studentStore.students.forEach((student) => {
     Object.values(student.subjects).forEach((subject) => {
-      const avg = (subject.average_term_1 + subject.average_term_2) / 2;
+      const avg = isTerm1 ? subject.average_term_1 : subject.average_term_2;
+
       if (avg >= 80) grades.A++;
       else if (avg >= 70) grades.B++;
       else if (avg >= 60) grades.C++;
