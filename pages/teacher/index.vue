@@ -58,7 +58,7 @@
             <div
               class="flex justify-start items-start flex-col gap-y-1 me-auto"
             >
-              <p class="text-[#010109] text-sm">100</p>
+              <p class="text-[#010109] text-sm">{{ totalStudents }}</p>
               <h3 class="me-auto Grotesque-Regular text-[#737373] text-xs">
                 Total Students
               </h3>
@@ -76,7 +76,7 @@
             <div
               class="flex justify-start items-start flex-col gap-y-1 me-auto"
             >
-              <p class="text-[#010109] text-sm">5</p>
+              <p class="text-[#010109] text-sm">{{ totalClasses }}</p>
               <h3 class="me-auto Grotesque-Regular text-[#737373] text-xs">
                 Total Classes Assigned
               </h3>
@@ -94,7 +94,7 @@
             <div
               class="flex justify-start items-start flex-col gap-y-1 me-auto"
             >
-              <p class="text-[#010109] text-sm">5</p>
+              <p class="text-[#010109] text-sm">{{ totalSubjects }}</p>
               <h3 class="me-auto Grotesque-Regular text-[#737373] text-xs">
                 Total Subjects Assigned
               </h3>
@@ -172,6 +172,7 @@
     <StudentsTable />
     <!-- student database table  -->
   </div>
+  <Spinner v-if="isLoading" />
 </template>
 
 <script setup>
@@ -180,7 +181,10 @@
 import personImg from "~/assets/img/person.png";
 import { useAuthStore } from "~/stores/auth.js";
 
-// console.log(authStore.user);
+import { useStudentStore } from "~/stores/student";
+
+const studentStore = useStudentStore();
+const isLoading = ref(false);
 
 definePageMeta({
   layout: "teacher",
@@ -193,6 +197,12 @@ const userDetails = ref({
   address: "",
   fullName: "",
 });
+
+const fetchStudents = async () => {
+  isLoading.value = true;
+  await studentStore.getStudents();
+  isLoading.value = false;
+};
 
 const loadUserFromLocalStorage = () => {
   if (process.client) {
@@ -217,6 +227,7 @@ const loadUserFromLocalStorage = () => {
 // Fetch user data when component mounts
 onMounted(() => {
   loadUserFromLocalStorage();
+  fetchStudents();
 });
 
 const isOpen = ref(false);
@@ -230,28 +241,6 @@ onMounted(() => {
 });
 
 // chart data
-
-const chartDataBar = ref({
-  labels: ["Alice", "Bob", "Charlie", "David", "Eve"],
-  datasets: [
-    {
-      label: "Grades",
-      data: [85, 72, 90, 78, 92],
-      backgroundColor: "#F7F7F7", // Base color for full height
-      borderRadius: 10, // Rounded tops
-      barPercentage: 0.4, // Slim bars
-      categoryPercentage: 0.7, // Space between bars
-    },
-    {
-      label: "Actual Grades",
-      data: [85, 72, 90, 78, 92],
-      backgroundColor: "#0050AB", // Main color on top
-      borderRadius: 10,
-      barPercentage: 0.4,
-      categoryPercentage: 0.7,
-    },
-  ],
-});
 
 // Dynamic Chart Options
 const chartOptionsBar = ref({
@@ -267,26 +256,6 @@ const chartOptionsBar = ref({
 });
 
 // chart option
-
-const chartDataPie = ref({
-  labels: ["A (80-100)", "B (70-79)", "C (60-69)", "D (50-59)", "F (<50)"],
-  datasets: [
-    {
-      label: "Grade Distribution",
-      data: [2, 1, 8, 4, 2], // You can modify this dynamically
-      backgroundColor: [
-        "#0050AB", // Blue
-        "#6495ED", // Lighter Blue
-        "#28A745", // Success Green
-        "#FFA726", // Orange (For D)
-        "#DC3545",
-      ],
-      borderWidth: 5,
-      borderColor: "#ffffff",
-      borderRadius: 10,
-    },
-  ],
-});
 
 // Dynamic Chart Options
 const chartOptionsPie = ref({
@@ -309,6 +278,84 @@ const selectOption = (option) => {
   selectedOption.value = option;
   isOpenFilterChart.value = false;
 };
+
+const totalStudents = computed(() => studentStore.students.length);
+const totalClasses = computed(() => {
+  const classes = new Set(
+    studentStore.students.map((s) => s.student_details.class)
+  );
+  return classes.size;
+});
+const totalSubjects = computed(() => {
+  const subjects = new Set();
+  studentStore.students.forEach((student) => {
+    Object.keys(student.subjects).forEach((subject) => subjects.add(subject));
+  });
+  return subjects.size;
+});
+
+const chartDataBar = computed(() => {
+  const labels = studentStore.students.map(
+    (student) => student.student_details.name
+  );
+  const term1Scores = studentStore.students.map(
+    (student) => student.subjects.Math?.average_term_1 || 0
+  );
+  const term2Scores = studentStore.students.map(
+    (student) => student.subjects.Math?.average_term_2 || 0
+  );
+
+  return {
+    labels,
+    datasets: [
+      {
+        label: "Term 1 Scores",
+        data: term1Scores,
+        backgroundColor: "#0050AB",
+        borderRadius: 10,
+      },
+      {
+        label: "Term 2 Scores",
+        data: term2Scores,
+        backgroundColor: "#6495ED",
+        borderRadius: 10,
+      },
+    ],
+  };
+});
+
+const chartDataPie = computed(() => {
+  const grades = { A: 0, B: 0, C: 0, D: 0, F: 0 };
+  studentStore.students.forEach((student) => {
+    Object.values(student.subjects).forEach((subject) => {
+      const avg = (subject.average_term_1 + subject.average_term_2) / 2;
+      if (avg >= 80) grades.A++;
+      else if (avg >= 70) grades.B++;
+      else if (avg >= 60) grades.C++;
+      else if (avg >= 50) grades.D++;
+      else grades.F++;
+    });
+  });
+
+  return {
+    labels: ["A (80-100)", "B (70-79)", "C (60-69)", "D (50-59)", "F (<50)"],
+    datasets: [
+      {
+        data: Object.values(grades),
+        backgroundColor: [
+          "#0050AB",
+          "#6495ED",
+          "#28A745",
+          "#FFA726",
+          "#DC3545",
+        ],
+        borderWidth: 5,
+        borderColor: "#ffffff",
+        borderRadius: 10,
+      },
+    ],
+  };
+});
 </script>
 
 <style>

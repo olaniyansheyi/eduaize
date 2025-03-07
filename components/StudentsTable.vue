@@ -16,16 +16,16 @@
         <div
           class="flex items-center justify-center cursor-pointer text-white gap-2"
         >
-          <img src="~/assets/img/filter.svg" class="w-6" />
-          <span class="text-sm capitalize truncate text-black poppinsMedium">
-            Filter By
+          <img src="~/assets/img/filter.svg" class="w-3" />
+          <span class="text-xs capitalize truncate text-black poppinsMedium">
+            Filter By: {{ selectedOption }}
           </span>
         </div>
         <svg
           class="cursor-pointer w-6 md:w-7 dark:fill-white dark:stroke-white"
           xmlns="http://www.w3.org/2000/svg"
-          width="24"
-          height="24"
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
         >
           <path
@@ -35,14 +35,14 @@
         </svg>
 
         <ul
-          v-if="isOpen"
+          v-if="isOpenFilter"
           class="absolute left-0 top-[100%] w-full bg-white border-[1px] border-[#2F2B43]/10 rounded-lg shadow-lg z-10"
         >
           <li
             v-for="option in options"
             :key="option"
             class="px-3 py-2 hover:bg-[#F9F9FC] cursor-pointer"
-            @click="selectOption(option)"
+            @click.stop="selectOption(option)"
           >
             {{ option }}
           </li>
@@ -52,11 +52,11 @@
 
     <!-- table element -->
     <div
-      class="flex flex-col w-full overflow-x-auto overflow-y-auto max-w-full h-[331px]"
+      class="flex flex-col w-full overflow-x-auto overflow-y-auto max-w-full h-[331px] gap-y-4"
     >
       <!-- Header -->
       <div
-        class="flex justify-between bg-[#F9F9F9] items-center w-[1000px] px-5 h-[68px]"
+        class="flex justify-between bg-[#F9F9F9] items-center w-[1000px] px-5 h-[68px] py-4"
       >
         <div class="flex-1 text-left">
           <h3 class="Grotesque-Regular text-md text-[#010109]">Student Name</h3>
@@ -65,7 +65,7 @@
           <h3 class="Grotesque-Regular text-md text-[#010109]">Score</h3>
         </div>
         <div class="flex-1 text-center">
-          <h3 class="Grotesque-Regular text-md text-[#010109]">Submitted</h3>
+          <h3 class="Grotesque-Regular text-md text-[#010109]">classs</h3>
         </div>
         <div class="flex-1 text-center">
           <h3 class="Grotesque-Regular text-md text-[#010109]">Grade</h3>
@@ -80,41 +80,45 @@
 
       <!-- Row with dropdown -->
       <div
-        v-for="(teacher, index) in teachers"
+        v-for="(student, index) in filteredStudents"
         :key="index"
-        class="flex justify-between border-b items-center border-b-[#E9E5E5] w-[1000px] h-[68px] px-5 relative"
+        class="flex justify-between border-b items-center border-b-[#E9E5E5] w-[1000px] px-5 relative py-2"
       >
-        <div class="flex-1 text-left">
+        <div class="flex-1 my-3 text-left">
           <div class="flex w-full justify-start items-center gap-x-3">
-            <img :src="teacher.image" class="w-[28px] rounded-full" lt="" />
+            <img
+              src="~/assets/img/person.png"
+              class="w-[28px] rounded-full"
+              lt=""
+            />
             <p class="text-[#4B4B4B] Grotesque-Regular text-[14px]">
-              {{ teacher.name }}
+              {{ student.name }}
             </p>
           </div>
         </div>
         <div class="flex-1 text-left">
           <p class="text-[#4B4B4B] Grotesque-Regular text-[14px]">
-            {{ teacher.score }}
+            {{ student.average }}
           </p>
         </div>
         <div class="flex-1 text-center">
           <p class="text-[#4B4B4B] Grotesque-Regular text-[14px]">
-            {{ teacher.submitted }}
+            {{ student.class }}
           </p>
         </div>
         <div class="flex-1 text-center">
           <p class="text-[#4B4B4B] Grotesque-Regular text-[14px]">
-            {{ teacher.grade }}
+            {{ student.grade }}
           </p>
         </div>
         <div class="flex-1 text-center">
           <button
             :class="[
               'py-1 px-8 rounded-lg text-[14px]',
-              teacher.status === 'fail' ? 'fail-btn' : 'pass-btn',
+              student.status === 'Fail' ? 'fail-btn' : 'pass-btn',
             ]"
           >
-            {{ teacher.status }}
+            {{ student.status }}
           </button>
         </div>
         <div class="w-[4%] text-center cursor-pointer relative">
@@ -309,49 +313,24 @@
 </template>
 
 <script setup>
-import personImg from "~/assets/img/person.png";
-import personImg2 from "~/assets/img/person2.png";
-import personImg3 from "~/assets/img/person3.png";
-const teachers = ref([
-  {
-    name: "John Doe",
-    score: "85/100",
-    submitted: "Yes",
-    grade: "A",
-    status: "pass",
-    image: personImg,
-  },
-  {
-    name: "Jane Smith",
-    score: "60/100",
-    submitted: "Yes",
-    grade: "C",
-    status: "fail",
-    image: personImg2,
-  },
-  {
-    name: "Michael Johnson",
-    score: "90/100",
-    submitted: "Yes",
-    grade: "A+",
-    status: "pass",
-    image: personImg3,
-  },
-]);
+import { useStudentStore } from "~/stores/student";
+
+const studentStore = useStudentStore();
+const isOpenFilter = ref(false);
+
 const selectedOption = ref("all");
 const options = ref(["pass", "fail", "Top student", "all"]);
 
 const toggleDropdown = () => {
-  isOpen.value = !isOpen.value;
+  isOpenFilter.value = !isOpenFilter.value;
 };
 
 const selectOption = (option) => {
   selectedOption.value = option;
-  isOpen.value = false;
+  isOpenFilter.value = !isOpenFilter.value;
 };
 
 const dropdownVisible = ref(null);
-const isOpen = ref(false);
 
 const isDeleteRoleModalOpen = ref(false);
 const openDeleteRoleModal = () => {
@@ -398,4 +377,50 @@ const closeStudentModal = () => {
 const closeModal = () => {
   isDeleteRoleModalOpen.value = false;
 };
+
+// Function to compute student details
+const students = computed(() => {
+  return studentStore.students.map((student) => {
+    // Calculate average score
+    const subjectAverages = Object.values(student.subjects).map(
+      (subj) => (subj.average_term_1 + subj.average_term_2) / 2
+    );
+    const totalAverage =
+      subjectAverages.reduce((acc, avg) => acc + avg, 0) /
+      subjectAverages.length;
+
+    return {
+      name: student.student_details.name,
+      class: student.student_details.class,
+      average: totalAverage.toFixed(2),
+      grade: getGrade(totalAverage),
+      status: totalAverage >= 40 ? "Pass" : "Fail",
+      image: student.image || "~/assets/img/person.png",
+    };
+  });
+});
+
+// Function to determine grade
+const getGrade = (avg) => {
+  if (avg >= 90) return "A+";
+  if (avg >= 80) return "A";
+  if (avg >= 70) return "B";
+  if (avg >= 60) return "C";
+  if (avg >= 50) return "D";
+  return "F";
+};
+
+// Computed property to filter students
+const filteredStudents = computed(() => {
+  if (selectedOption.value.toLowerCase() === "pass") {
+    return students.value.filter((s) => s.status.toLowerCase() === "pass");
+  }
+  if (selectedOption.value.toLowerCase() === "fail") {
+    return students.value.filter((s) => s.status.toLowerCase() === "fail");
+  }
+  if (selectedOption.value.toLowerCase() === "top student") {
+    return students.value.filter((s) => parseFloat(s.average) >= 80);
+  }
+  return students.value; // Show all
+});
 </script>

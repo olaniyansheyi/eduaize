@@ -5,7 +5,7 @@
     <div class="w-full mt-3 mb-4 flex justify-between items-center">
       <div>
         <h3 class="Grotesque-Regular text-md text-[#010109]">
-          Students At Risk
+          Top 5 Students At Risk
         </h3>
       </div>
     </div>
