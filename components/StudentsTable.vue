@@ -264,36 +264,50 @@
               class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
             />
           </div>
-          <div class="w-full">
-            <label class="Grotesque-Regular text-md text-[#010109]"
-              >Score</label
-            >
-            <input
-              type="text"
-              v-model="editStudentData.score"
-              class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
-            />
+          <div class="w-full flex justify-between items-center gap-x-3">
+            <div class="w-full">
+              <label class="Grotesque-Regular text-md text-[#010109]"
+                >class</label
+              >
+              <input
+                type="text"
+                v-model="editStudentData.score"
+                class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
+              />
+            </div>
+            <div class="w-full">
+              <label class="Grotesque-Regular text-md text-[#010109]">id</label>
+              <input
+                type="text"
+                v-model="editStudentData.submitted"
+                class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
+              />
+            </div>
           </div>
-          <div class="w-full">
-            <label class="Grotesque-Regular text-md text-[#010109]"
-              >Submitted</label
-            >
-            <input
-              type="text"
-              v-model="editStudentData.submitted"
-              class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
-            />
+
+          <div class="w-full flex justify-between items-center gap-x-3">
+            <div class="w-full">
+              <label class="Grotesque-Regular text-md text-[#010109]"
+                >Email</label
+              >
+              <input
+                type="text"
+                v-model="editStudentData.score"
+                class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
+              />
+            </div>
+            <div class="w-full">
+              <label class="Grotesque-Regular text-md text-[#010109]"
+                >Grade</label
+              >
+              <input
+                type="text"
+                v-model="editStudentData.submitted"
+                class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
+              />
+            </div>
           </div>
-          <div class="w-full">
-            <label class="Grotesque-Regular text-md text-[#010109]"
-              >Grade</label
-            >
-            <input
-              type="text"
-              v-model="editStudentData.grade"
-              class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
-            />
-          </div>
+
           <div class="w-full">
             <label class="Grotesque-Regular text-md text-[#010109]"
               >Upload Avatar</label
@@ -452,4 +466,6 @@ const nextPage = () => {
 const prevPage = () => {
   if (currentPage.value > 1) currentPage.value--;
 };
+
+console.log(studentStore.students);
 </script>
