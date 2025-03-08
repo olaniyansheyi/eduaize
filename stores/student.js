@@ -20,22 +20,57 @@ export const useStudentStore = defineStore("student", {
         console.error("Unexpected error:", error);
       }
     },
+
     async editStudent(updatedStudent) {
+      try {
+        const { $supabase } = useNuxtApp();
+
+        // Update student
+        const { error } = await $supabase
+          .from("scores")
+          .update(updatedStudent)
+          .match({ id: updatedStudent.id });
+
+        if (error) {
+          console.error("Error updating student:", error);
+          return;
+        }
+
+        // Fetch the updated student to get the latest data
+        const { data, error: fetchError } = await $supabase
+          .from("scores")
+          .select("*")
+          .match({ id: updatedStudent.id })
+          .single(); // Get single object instead of array
+
+        if (fetchError) {
+          console.error("Error fetching updated student:", fetchError);
+          return;
+        }
+
+        // Find and update student in store
+        const index = this.students.findIndex(
+          (s) => s.id === updatedStudent.id
+        );
+        if (index !== -1) {
+          this.students[index] = data; // Directly assign object (not data[0])
+        }
+      } catch (error) {
+        console.error("Unexpected error:", error);
+      }
+    },
+    async createStudent(newStudent) {
       try {
         const { $supabase } = useNuxtApp();
         const { data, error } = await $supabase
           .from("scores")
-          .update(updatedStudent)
-          .match({ id: updatedStudent.id });
+          .insert(newStudent)
+          .select();
+
         if (error) {
-          console.error("Error updating student", error);
+          console.error("Error creating student", error);
         } else {
-          const index = this.students.findIndex(
-            (s) => s.id === updatedStudent.id
-          );
-          if (index !== -1) {
-            this.students[index] = data[0];
-          }
+          this.students.push(data[0]);
         }
       } catch (error) {
         console.error("Unexpected error:", error);

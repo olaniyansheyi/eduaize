@@ -125,7 +125,7 @@
           <img
             src="~/assets/img/icons/dotted-menu.png"
             alt="Menu"
-            @click="toggleDropdownDelete(index)"
+            @click="toggleDropdownDelete(index, student)"
           />
           <!-- action modal -->
           <div
@@ -140,13 +140,13 @@
             </button>
             <button
               class="block w-full text-left px-4 py-2 text-[#0050A8] hover:bg-gray-100 text-xs"
-              @click="openCreateStudentModal(teacher)"
+              @click="openCreateStudentModal()"
             >
               Create Student
             </button>
             <button
               class="block w-full text-left px-4 py-2 text-[#0050A8] hover:bg-gray-100 text-xs"
-              @click="openEditStudentModal(teacher)"
+              @click="openEditStudentModal()"
             >
               Edit Student
             </button>
@@ -260,7 +260,7 @@
             >
             <input
               type="text"
-              v-model="editStudentData.name"
+              v-model="studentInfo.name"
               class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
             />
           </div>
@@ -271,7 +271,7 @@
               >
               <input
                 type="text"
-                v-model="editStudentData.score"
+                v-model="studentInfo.class"
                 class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
               />
             </div>
@@ -279,7 +279,7 @@
               <label class="Grotesque-Regular text-md text-[#010109]">id</label>
               <input
                 type="text"
-                v-model="editStudentData.submitted"
+                v-model="studentInfo.id"
                 class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
               />
             </div>
@@ -292,7 +292,7 @@
               >
               <input
                 type="text"
-                v-model="editStudentData.score"
+                v-model="studentInfo.email"
                 class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
               />
             </div>
@@ -302,7 +302,7 @@
               >
               <input
                 type="text"
-                v-model="editStudentData.submitted"
+                v-model="studentInfo.grade"
                 class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
               />
             </div>
@@ -318,7 +318,12 @@
             />
           </div>
           <button
-            @click="closeStudentModal"
+            @click="
+              () => {
+                isEditMode ? saveStudent() : createStudent();
+                closeStudentModal();
+              }
+            "
             class="bg-[#0050A8] py-2 w-full text-white rounded-lg"
           >
             {{ isEditMode ? "Update Student" : "Create Student" }}
@@ -327,16 +332,27 @@
       </div>
     </Modal>
   </div>
+  <Spinner v-if="isLoading" />
 </template>
 
 <script setup>
 import { useStudentStore } from "~/stores/student";
+const { $toast } = useNuxtApp();
 
 const studentStore = useStudentStore();
 const isOpenFilter = ref(false);
+const isLoading = ref(false);
+const studentData = ref({});
 
 const selectedOption = ref("all");
 const options = ref(["pass", "fail", "Top student", "all"]);
+const studentInfo = ref({
+  name: studentData.value.name,
+  email: studentData.value.email,
+  id: "2020-002",
+  grade: studentData.value.class,
+  class: "science",
+});
 
 const toggleDropdown = () => {
   isOpenFilter.value = !isOpenFilter.value;
@@ -355,35 +371,21 @@ const openDeleteRoleModal = () => {
   dropdownVisible.value = null;
 };
 
-const toggleDropdownDelete = (index) => {
+const toggleDropdownDelete = (index, student) => {
   dropdownVisible.value = dropdownVisible.value === index ? null : index;
+  studentData.value = student;
 };
 
 const isStudentModalOpen = ref(false);
 const isEditMode = ref(false);
-const editStudentData = ref({
-  name: "",
-  score: "",
-  submitted: "",
-  grade: "",
-  image: null,
-});
 
 const openCreateStudentModal = () => {
   isEditMode.value = false;
-  editStudentData.value = {
-    name: "",
-    score: "",
-    submitted: "",
-    grade: "",
-    image: null,
-  };
   isStudentModalOpen.value = true;
 };
 
-const openEditStudentModal = (student) => {
+const openEditStudentModal = () => {
   isEditMode.value = true;
-  editStudentData.value = { ...student };
   isStudentModalOpen.value = true;
 };
 
@@ -409,10 +411,12 @@ const students = computed(() => {
     return {
       name: student.student_details.name,
       class: student.student_details.class,
+      email: student.student_details.email,
       average: totalAverage.toFixed(2),
       grade: getGrade(totalAverage),
       status: totalAverage >= 40 ? "Pass" : "Fail",
       image: student.image || "~/assets/img/person.png",
+      id: student.id,
     };
   });
 });
@@ -469,8 +473,70 @@ const prevPage = () => {
 
 // console.log(studentStore.students);
 
-const deleteStudent = (student) => {
-  studentStore.deleteStudent(student.id);
-  closeModal();
+// create edit and delete student implementation
+
+const deleteStudent = async () => {
+  try {
+    isLoading.value = true;
+
+    await studentStore.deleteStudent(studentData.value.id);
+    $toast.success("Student deleted successfully!");
+    closeModal();
+  } catch (error) {
+    $toast.error("Error deleting student.");
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+const createStudent = async () => {
+  try {
+    isLoading.value = true;
+
+    const newStudent = {
+      student_details: {
+        name: studentInfo.value.name,
+        class: studentInfo.value.class,
+        email: studentInfo.value.email,
+        studentId: studentInfo.value.id,
+      },
+      subjects: {},
+      created_at: new Date().toISOString(),
+    };
+
+    await studentStore.createStudent(newStudent);
+    $toast.success("Student created successfully!");
+    closeStudentModal(); // Fix: Ensure the right function is called
+  } catch (error) {
+    console.error("Error creating student:", error);
+    $toast.error("Error creating student.");
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+const saveStudent = async () => {
+  try {
+    isLoading.value = true;
+
+    // Call the edit function with updated details
+    await studentStore.editStudent({
+      id: studentData.value.id,
+      student_details: {
+        name: studentInfo.value.name,
+        email: studentInfo.value.email,
+        studentId: studentInfo.value.id,
+        class: studentInfo.value.class,
+      },
+    });
+
+    $toast.success("Student updated successfully!");
+    closeStudentModal();
+  } catch (error) {
+    console.error("Error updating student:", error);
+    $toast.error("Error updating student.");
+  } finally {
+    isLoading.value = false;
+  }
 };
 </script>
