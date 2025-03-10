@@ -197,12 +197,6 @@ const userDetails = ref({
   fullName: "",
 });
 
-const fetchStudents = async () => {
-  isLoading.value = true;
-  await studentStore.getStudents();
-  isLoading.value = false;
-};
-
 const loadUserFromLocalStorage = () => {
   if (process.client) {
     const storedUser = localStorage.getItem("user");
@@ -226,7 +220,7 @@ const loadUserFromLocalStorage = () => {
 // Fetch user data when component mounts
 onMounted(() => {
   loadUserFromLocalStorage();
-  fetchStudents();
+  console.log(studentStore.students);
 });
 
 const isOpen = ref(false);

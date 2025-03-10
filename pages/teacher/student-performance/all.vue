@@ -62,7 +62,6 @@
   <!-- students table  -->
 
   <studentsTable />
-  <Spinner v-if="isLoading" />
 </template>
 
 <script setup>
@@ -181,9 +180,4 @@ const fetchStudents = async () => {
   await studentStore.getStudents();
   isLoading.value = false;
 };
-
-// Fetch user data when component mounts
-onMounted(() => {
-  fetchStudents();
-});
 </script>

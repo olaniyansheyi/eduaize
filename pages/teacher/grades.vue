@@ -56,118 +56,78 @@
             This Grade will be recorded for the current term
           </p>
         </div>
-        <NuxtLink href="/">
-          <button
-            class="bg-[#0050A8] text-white whitespace-nowrap text-xs px-3 md:px-8 rounded-lg py-3 md:text-md"
-          >
-            Save and Publish
-          </button>
-        </NuxtLink>
+
+        <!-- ✅ Updated: Call uploadStudentData on click -->
+        <button
+          @click="uploadStudentData"
+          :disabled="isLoading"
+          class="bg-[#0050A8] text-white whitespace-nowrap text-xs px-3 md:px-8 rounded-lg py-3 md:text-md"
+        >
+          <span v-if="!isLoading">Save and Publish</span>
+          <span v-else>Saving...</span>
+        </button>
       </div>
+
       <div
         class="w-full flex justify-center items-start gap-8 flex-wrap lg:flex-nowrap"
       >
         <form class="w-full lg:w-[45%] flex flex-col gap-y-4">
-          <div class="w-full">
-            <label class="Grotesque-Regular text-md text-[#010109]">
-              Name of Student
-            </label>
-
-            <input
-              type="text"
-              class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1"
-            />
-          </div>
-
           <h1 class="Grotesque-Regular text-md text-[#737373]">
             List Subjects Assigned To You
           </h1>
 
-          <div
-            class="w-full flex justify-between items-center sm:gap-x-0 gap-x-5 flex-wrap"
-          >
-            <div class="lg:w-auto w-[46%]">
-              <label class="Grotesque-Regular text-md text-[#010109]">
-                Math
-              </label>
-
+          <div class="w-full flex flex-wrap gap-x-5">
+            <div
+              v-for="subject in [
+                'Math',
+                'English',
+                'Physics',
+                'Economics',
+                'History',
+              ]"
+              :key="subject"
+              class="lg:w-auto w-[46%]"
+            >
+              <label class="Grotesque-Regular text-md text-[#010109]">{{
+                subject
+              }}</label>
               <input
+                v-model="studentScores[subject]"
                 type="text"
-                class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1"
-                placeholder="Grade/100"
-              />
-            </div>
-            <div class="lg:w-auto w-[46%]">
-              <label class="Grotesque-Regular text-md text-[#010109]">
-                English
-              </label>
-
-              <input
-                type="text"
-                class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1"
-                placeholder="Grade/100"
-              />
-            </div>
-            <div class="lg:w-auto w-[46%]">
-              <label class="Grotesque-Regular text-md text-[#010109]">
-                Basic Tech
-              </label>
-
-              <input
-                type="text"
-                class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1"
-                placeholder="Grade/100"
-              />
-            </div>
-            <div class="lg:w-auto w-[46%]">
-              <label class="Grotesque-Regular text-md text-[#010109]">
-                Economics
-              </label>
-
-              <input
-                type="text"
-                class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1"
-                placeholder="Grade/100"
-              />
-            </div>
-            <div class="lg:w-auto w-[46%]">
-              <label class="Grotesque-Regular text-md text-[#010109]">
-                Agric
-              </label>
-
-              <input
-                type="text"
-                class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1"
+                class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
                 placeholder="Grade/100"
               />
             </div>
           </div>
 
+          <!-- ✅ Updated: Bind input values to studentId and remark -->
           <div
             class="w-full flex justify-between items-center sm:gap-x-0 gap-x-5"
           >
             <div class="">
-              <label class="Grotesque-Regular text-md text-[#010109]">
-                Student ID
-              </label>
-
+              <label class="Grotesque-Regular text-md text-[#010109]"
+                >Student ID</label
+              >
               <input
+                v-model="selectedStudentId"
                 type="text"
-                class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1"
+                class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
               />
             </div>
             <div class="">
-              <label class="Grotesque-Regular text-md text-[#010109]">
-                Remark
-              </label>
-
+              <label class="Grotesque-Regular text-md text-[#010109]"
+                >Remark</label
+              >
               <input
+                v-model="remark"
                 type="text"
-                class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg flex items-center justify-between outline-none mb-2 mt-1"
+                class="custom-select w-full bg-[#F9F9FC] border-[1px] border-[#2F2B43]/10 h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
               />
             </div>
           </div>
         </form>
+
+        <!-- Attendance Section -->
         <div class="w-full lg:w-[45%] text-left">
           <h3 class="Grotesque-Regular text-md text-[#010109] mb-4">
             Attendance
@@ -180,9 +140,15 @@
               <div class="flex flex-col gap-y-2 justify-center items-start">
                 <span
                   v-for="week in termWeeks"
+                  :key="week"
                   class="flex gap-x-2 justify-center items-center"
                 >
-                  <input type="checkbox" class="custom-checkbox" />
+                  <input
+                    type="checkbox"
+                    class="custom-checkbox"
+                    v-model="selectedWeeks"
+                    :value="week"
+                  />
                   <h4 class="Grotesque-Regular text-[14px] text-[#737373]">
                     Week {{ week }}
                   </h4>
@@ -193,7 +159,6 @@
         </div>
       </div>
     </div>
-
     <!-- upload in bulk -->
 
     <div v-if="selectedTab === 'bulk'">
@@ -269,12 +234,24 @@
 </template>
 
 <script setup>
-definePageMeta({
-  layout: "teacher",
-});
+import { useStudentStore } from "~/stores/student";
+import { useToast } from "vue-toastification";
 
 const selectedTab = ref("individual");
 const termWeeks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+
+const toast = useToast();
+const studentStore = useStudentStore();
+
+const selectedStudentId = ref("");
+const studentScores = ref({});
+const remark = ref("");
+const selectedWeeks = ref([]);
+const isLoading = ref(false);
+
+definePageMeta({
+  layout: "teacher",
+});
 
 // drag and drop implementation
 
