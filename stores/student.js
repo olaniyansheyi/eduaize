@@ -27,7 +27,7 @@ export const useStudentStore = defineStore("student", {
         // ✅ Fetch student using primary key (id)
         const { data: student, error: fetchError } = await $supabase
           .from("scores")
-          .select("*")
+          .select("subjects")
           .match({ id: studentId }) // Match by primary key
           .single();
 
@@ -41,27 +41,58 @@ export const useStudentStore = defineStore("student", {
           return;
         }
 
-        // ✅ Create an updated object
-        const updatedStudentData = {};
+        // ✅ Update the subjects object safely
+        const updatedSubjects = { ...student.subjects };
 
         for (const subject of Object.keys(updatedScores)) {
-          // Ensure subject exists
-          if (!student[subject]) {
-            student[subject] = {}; // Initialize subject if it doesn't exist
+          // Ensure the subject exists
+          if (!updatedSubjects[subject]) {
+            updatedSubjects[subject] = {
+              attendance: { term_1: 0, term_2: 0, term_3: 0 }, // Ensure structure
+              term_1_scores: [],
+              term_2_scores: [],
+              term_3_scores: [],
+              average_term_1: 0,
+              average_term_2: 0,
+              average_term_3: 0,
+              teacher_remark: { term_1: "", term_2: "", term_3: "" },
+            };
           }
 
-          // ✅ Add term_3_scores to each subject dynamically
-          updatedStudentData[subject] = {
-            ...student[subject], // Preserve existing data
-            term_3_scores: updatedScores[subject].term_3_scores || [], // Add new scores
-          };
+          // ✅ Add term_3_scores dynamically if provided
+          if (updatedScores[subject].term_3_scores) {
+            updatedSubjects[subject].term_3_scores =
+              updatedScores[subject].term_3_scores;
+          }
+
+          // ✅ Handle attendance update
+          if (updatedScores[subject].attendance) {
+            updatedSubjects[subject].attendance.term_3 =
+              updatedScores[subject].attendance;
+          }
+
+          // ✅ Handle teacher remark update
+          if (updatedScores[subject].teacher_remark) {
+            updatedSubjects[subject].teacher_remark.term_3 =
+              updatedScores[subject].teacher_remark;
+          }
+
+          // ✅ Calculate and update average for term 3 if scores exist
+          if (updatedSubjects[subject].term_3_scores.length > 0) {
+            const total = updatedSubjects[subject].term_3_scores.reduce(
+              (acc, score) => acc + score,
+              0
+            );
+            updatedSubjects[subject].average_term_3 =
+              total / updatedSubjects[subject].term_3_scores.length;
+          }
         }
 
-        // ✅ Update student scores in the database
+        // ✅ Update the subjects field in the database
         const { error: updateError } = await $supabase
           .from("scores")
-          .update(updatedStudentData)
-          .match({ id: studentId }); // Use primary key
+          .update({ subjects: updatedSubjects }) // Update the entire subjects object
+          .match({ id: studentId });
 
         if (updateError) {
           console.error("Error updating student scores:", updateError);
@@ -107,6 +138,45 @@ export const useStudentStore = defineStore("student", {
         );
         if (index !== -1) {
           this.students[index] = data; // Directly assign object (not data[0])
+        }
+      } catch (error) {
+        console.error("Unexpected error:", error);
+      }
+    },
+
+    async createStudentScore(updatedStudent, id) {
+      try {
+        const { $supabase } = useNuxtApp();
+
+        // Update only the subjects column
+        const { error } = await $supabase
+          .from("scores")
+          .update({ subjects: updatedStudent.subjects })
+          .match({ id: id });
+
+        if (error) {
+          console.error("Error updating student:", error);
+          return;
+        }
+
+        // Fetch the latest student data
+        const { data, error: fetchError } = await $supabase
+          .from("scores")
+          .select("*")
+          .match({ id: id })
+          .single();
+
+        if (fetchError) {
+          console.error("Error fetching updated student:", fetchError);
+          return;
+        }
+
+        // Find and update student in store
+        const index = this.students.findIndex(
+          (s) => s.id === updatedStudent.id
+        );
+        if (index !== -1) {
+          this.students[index] = data; // Update with latest student data
         }
       } catch (error) {
         console.error("Unexpected error:", error);
