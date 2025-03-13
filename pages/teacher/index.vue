@@ -220,7 +220,6 @@ const loadUserFromLocalStorage = () => {
 // Fetch user data when component mounts
 onMounted(() => {
   loadUserFromLocalStorage();
-  console.log(studentStore.students);
 });
 
 const isOpen = ref(false);
