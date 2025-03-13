@@ -20,6 +20,28 @@ export const useStudentStore = defineStore("student", {
         console.error("Unexpected error:", error);
       }
     },
+    async getStudent(studentId) {
+      try {
+        const { $supabase } = useNuxtApp();
+
+        // Fetch the student by ID
+        const { data, error } = await $supabase
+          .from("scores")
+          .select("*")
+          .match({ id: studentId })
+          .single();
+
+        if (error) {
+          console.error("Error fetching student:", error);
+          return null;
+        }
+
+        return data; 
+      } catch (error) {
+        console.error("Unexpected error:", error);
+        return null;
+      }
+    },
     async createStudentScore(studentId, updatedScores) {
       try {
         const { $supabase } = useNuxtApp();

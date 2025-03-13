@@ -86,7 +86,7 @@
         <NuxtLink
           v-for="student in topStudents"
           :key="student.student_details.studentId"
-          to="/student-performance"
+          :to="`/student/${student.id}`"
           @click="searchStore.handleToggleSearch"
           class="flex justify-between items-center w-full hover:bg-[#e2dddd3b]"
         >
@@ -133,7 +133,7 @@
           <NuxtLink
             v-for="student in filteredStudents"
             :key="student.student_details.studentId"
-            to="/student-performance"
+            :to="`/student/${student.id}`"
             @click="searchStore.handleToggleSearch"
             class="flex justify-between items-center w-full hover:bg-[#e2dddd3b]"
           >

@@ -11,13 +11,10 @@ const props = defineProps({
   attendance: Number, // Expect attendance count (out of 12)
 });
 
-// Compute attendance percentage
-const attendancePercentage = computed(() =>
-  Math.round((props.attendance / 12) * 100)
-);
-
 // Store the chart instance for reactivity
 const chartRef = ref(null);
+
+const attendancePercentage = computed(() => Math.round(props.attendance));
 
 // Chart Data
 const chartData = computed(() => ({
@@ -25,9 +22,9 @@ const chartData = computed(() => ({
   datasets: [
     {
       label: "Student Attendance",
-      data: [props.attendance, 12 - props.attendance], // Attendance vs Remaining
-      backgroundColor: ["#0050A8", "#A0A0A0"], // Active: Blue, Remaining: Dark Gray
-      borderWidth: 0, // No border
+      data: [props.attendance, Math.max(0, 120 - props.attendance)], // Adjust based on real max
+      backgroundColor: ["#0050A8", "#A0A0A0"],
+      borderWidth: 0,
     },
   ],
 }));
@@ -82,8 +79,8 @@ const chartOptions = computed(() => ({
 watch(
   () => props.attendance,
   () => {
-    if (chartRef.value) {
-      chartRef.value.update(); // Manually trigger chart re-draw
+    if (chartRef.value?.chart) {
+      chartRef.value.chart.update();
     }
   }
 );
