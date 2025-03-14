@@ -36,7 +36,7 @@ export const useStudentStore = defineStore("student", {
           return null;
         }
 
-        return data; 
+        return data;
       } catch (error) {
         console.error("Unexpected error:", error);
         return null;

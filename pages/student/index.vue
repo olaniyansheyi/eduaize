@@ -9,23 +9,37 @@
           class="custom-select w-full bg-[#F9F9FC] border border-[#2F2B43]/10 h-[50px] px-5 rounded-lg flex items-center justify-between cursor-pointer relative mt-1 gap-x-3"
           @click="toggleDropdown"
         >
-          <span>{{ selectedChildName }}</span>
+          <span>{{ selectedTerm === "term_1" ? "Term 1" : "Term 2" }}</span>
           <img src="~/assets/img/icons/selectdown.png" class="w-2 h-2" />
         </div>
 
-        <!-- Dropdown List with Smooth Transition -->
+        <!-- Dropdown List -->
         <transition name="fade">
           <ul
             v-if="isOpen"
             class="absolute left-0 top-[115%] w-full bg-white border border-[#2F2B43]/10 rounded-lg shadow-lg z-10"
           >
             <li
-              v-for="child in children"
-              :key="child.id"
               class="px-3 py-2 hover:bg-[#F9F9FC] cursor-pointer"
-              @click="selectChild(child.id)"
+              @click.stop="
+                () => {
+                  selectedTerm = 'term_1';
+                  toggleDropdown();
+                }
+              "
             >
-              {{ child.name }} - {{ child.class }}
+              Term 1
+            </li>
+            <li
+              class="px-3 py-2 hover:bg-[#F9F9FC] cursor-pointer"
+              @click.stop="
+                () => {
+                  selectedTerm = 'term_2';
+                  toggleDropdown();
+                }
+              "
+            >
+              Term 2
             </li>
           </ul>
         </transition>
@@ -33,7 +47,6 @@
     </div>
 
     <!-- student details  -->
-
     <div
       class="w-full mt-3 my-4 flex justify-start flex-col gap-y-6 items-center"
     >
@@ -47,13 +60,13 @@
         />
         <div class="h-full flex justify-start items-start flex-col gap-y-2">
           <h3 class="me-auto Grotesque-Regular text-md text-[#010109]">
-            John Anetor
+            {{ student?.student_details?.name || "Loading..." }}
           </h3>
 
           <div class="flex justify-start items-start flex-col gap-y-1">
             <p class="text-[#737373] text-sm">Student ID</p>
             <h3 class="me-auto Grotesque-Regular text-sm text-[#010109]">
-              2020-0001
+              {{ student?.student_details?.studentId || "N/A" }}
             </h3>
           </div>
         </div>
@@ -61,24 +74,24 @@
           <div class="flex justify-start items-start flex-col gap-y-1">
             <p class="text-[#737373] text-sm">Class</p>
             <h3 class="me-auto Grotesque-Regular text-sm text-[#010109]">
-              Grade 10 - Science
+              {{ student?.student_details?.class || "N/A" }}
             </h3>
           </div>
         </div>
       </div>
     </div>
 
-    <!-- srudent Summary -->
+    <!-- student Summary -->
     <div
       class="w-full flex justify-between items-start flex-wrap gap-5 mt-4 px-4"
     >
       <div
-        v-for="stat in stats"
-        :key="stat.label"
+        v-for="(value, key) in studentStats"
+        :key="key"
         class="rounded-xl flex justify-center items-center bg-[#F7F7F7] p-4 w-full sm:w-[47%] lg:w-[22%] flex-col"
       >
-        <p class="text-lg font-bold" :class="stat.color">{{ stat.value }}</p>
-        <p class="text-sm text-[#737373]">{{ stat.label }}</p>
+        <p class="text-lg font-bold text-[#010109]">{{ value }}</p>
+        <p class="text-sm text-[#737373]">{{ key }}</p>
       </div>
     </div>
 
@@ -211,66 +224,12 @@ definePageMeta({
   middleware: "auth",
 });
 
-const children = ref([
-  {
-    id: 1,
-    name: "Sheyi Olaniyan",
-    class: "Grade 5",
-    performance: 85,
-    attendance: 92,
-    grade: "A",
-    behavior: "Good",
-  },
-  {
-    id: 2,
-    name: "Loveth Olaniyan",
-    class: "Grade 3",
-    performance: 76,
-    attendance: 88,
-    grade: "B",
-    behavior: "Needs Improvement",
-  },
-]);
+import { useStudentStore } from "~/stores/student";
 
-const selectedChild = ref(1);
+const studentStore = useStudentStore();
+
 const isOpen = ref(false);
 const toggleDropdown = () => (isOpen.value = !isOpen.value);
-const selectChild = (id) => {
-  selectedChild.value = id;
-  isOpen.value = false;
-};
-
-const currentChild = computed(() =>
-  children.value.find((child) => child.id === selectedChild.value)
-);
-
-const selectedChildName = computed(() => {
-  const child = children.value.find((c) => c.id === selectedChild.value);
-  return child ? `${child.name} - ${child.class}` : "Select Child";
-});
-
-const stats = computed(() => [
-  {
-    label: "Performance",
-    value: `${currentChild.value?.performance}%`,
-    color: "text-green-600",
-  },
-  {
-    label: "Attendance",
-    value: `${currentChild.value?.attendance}%`,
-    color: "text-blue-600",
-  },
-  {
-    label: "Grade",
-    value: currentChild.value?.grade,
-    color: "text-yellow-600",
-  },
-  {
-    label: "Behavior",
-    value: currentChild.value?.behavior,
-    color: "text-purple-600",
-  },
-]);
 
 const aiInsights = ref(
   "John's performance is improving. He needs more focus on Math to reach an A grade."
@@ -278,13 +237,6 @@ const aiInsights = ref(
 const alerts = ref(
   "John was absent 3 times last month. Please check with the school."
 );
-
-// Dummy Data for Grade Comparison Chart
-const grades = ref({
-  labels: ["Math", "Science", "English", "History", "Art"],
-  student: [85, 70, 78, 90, 88], // Your grades
-  classAverage: [80, 75, 85, 88, 82], // Class average
-});
 
 // AI-Powered Study Recommendations
 const studyRecommendations = ref([
@@ -304,28 +256,6 @@ const learningResources = ref([
 ]);
 
 // chart data
-
-const chartDataBar = ref({
-  labels: ["Alice", "Bob", "Charlie", "David", "Eve"],
-  datasets: [
-    {
-      label: "Grades",
-      data: [85, 72, 90, 78, 92],
-      backgroundColor: "#F7F7F7",
-      borderRadius: 10,
-      barPercentage: 0.4,
-      categoryPercentage: 0.7,
-    },
-    {
-      label: "Actual Grades",
-      data: [85, 72, 90, 78, 92],
-      backgroundColor: "#0050AB",
-      borderRadius: 10,
-      barPercentage: 0.4,
-      categoryPercentage: 0.7,
-    },
-  ],
-});
 
 const chartOptionsBar = ref({
   responsive: true,
@@ -347,6 +277,105 @@ const studyPlan = ref([
   { day: "Saturday", subject: "Chemistry", topic: "Periodic Table" },
   { day: "Sunday", subject: "Revision", topic: "Past Exam Papers" },
 ]);
+
+const userDetails = ref({
+  id: "",
+  email: "",
+  address: "",
+  fullName: "",
+});
+
+const loadUserFromLocalStorage = () => {
+  if (process.client) {
+    const storedUser = localStorage.getItem("user");
+
+    if (storedUser) {
+      const userData = JSON.parse(storedUser);
+
+      userDetails.value = {
+        id: userData.id,
+        email: userData.user_metadata?.email || "N/A",
+        address: userData.user_metadata?.address || "N/A",
+        fullName: userData.user_metadata?.fullName || "N/A",
+      };
+    }
+  }
+};
+
+// Fetch user data when component mounts
+onMounted(() => {
+  loadUserFromLocalStorage();
+});
+
+watch(
+  () => userDetails.value.id,
+  async (newId) => {
+    if (newId) {
+      student.value = await studentStore.getStudent(newId);
+      console.log(student.value);
+    }
+  },
+  { immediate: true }
+);
+
+const student = ref({}); // Will be populated asynchronously
+const selectedTerm = ref("term_1"); // Default to Term 1
+const studentStats = ref({});
+const chartDataBar = ref({
+  labels: [],
+  datasets: [],
+});
+
+watch(
+  () => student.value,
+  (newStudent) => {
+    if (newStudent?.subjects) {
+      updateStudentData(selectedTerm.value); // Initialize with Term 1
+    }
+  },
+  { immediate: true, deep: true }
+);
+
+const updateStudentData = (term) => {
+  if (!student.value?.subjects) return;
+
+  const subjects = Object.keys(student.value.subjects);
+  if (subjects.length === 0) return; // Avoid empty data issues
+
+  studentStats.value = {
+    "Math Average": `${student.value.subjects.Math?.[`average_${term}`] || 0}%`,
+    "English Average": `${
+      student.value.subjects.English?.[`average_${term}`] || 0
+    }%`,
+    "Biology Average": `${
+      student.value.subjects.Biology?.[`average_${term}`] || 0
+    }%`,
+    "Physics Average": `${
+      student.value.subjects.Physics?.[`average_${term}`] || 0
+    }%`,
+  };
+
+  chartDataBar.value = {
+    labels: subjects,
+    datasets: [
+      {
+        label: "Grades",
+        data: subjects.map(
+          (subj) => student.value.subjects[subj]?.[`average_${term}`] || 0
+        ),
+        backgroundColor: "#0050AB",
+        borderRadius: 10,
+        barPercentage: 0.4,
+        categoryPercentage: 0.7,
+      },
+    ],
+  };
+};
+
+// Watch for term change
+watch(selectedTerm, (newTerm) => {
+  updateStudentData(newTerm);
+});
 
 // chart data
 </script>
