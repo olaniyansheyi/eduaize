@@ -6,7 +6,7 @@
       class="rounded-xl flex justify-center items-center bg-[#F7F7F7] p-4 w-full sm:w-[47%] sm:gap-x-0 lg:w-[22%]"
     >
       <div class="flex justify-center items-center flex-col gap-y-1 mx-auto">
-        <p class="text-[#010109] text-lg font-bold">200</p>
+        <p class="text-[#010109] text-lg font-bold">{{ totalTeachers }}</p>
         <h3 class="Grotesque-Regular text-[#737373] text-sm text-center">
           Toatal Teacher
         </h3>
@@ -16,7 +16,7 @@
       class="rounded-xl py flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 w-full sm:w-[47%] sm:gap-x-0 lg:w-[22%]"
     >
       <div class="flex justify-center items-center flex-col gap-y-1 mx-auto">
-        <p class="text-[#010109] text-lg font-bold">54</p>
+        <p class="text-[#010109] text-lg font-bold">{{ totalClasses }}</p>
         <h3
           class="me-auto Grotesque-Regular text-[#737373] text-sm whitespace-nowrap"
         >
@@ -92,9 +92,7 @@
         </div>
         <div class="flex-1 text-left">
           <p class="text-[#4B4B4B] Grotesque-Regular text-[14px]">
-            {{
-              teacher.subjects ? JSON.parse(teacher.subjects).join(", ") : "N/A"
-            }}
+            {{ teacher.subjects }}
           </p>
         </div>
         <div class="flex-1 text-center">
@@ -130,7 +128,7 @@
           >
             <button
               class="block w-full text-left px-4 py-2 text-[#C9252D] hover:bg-gray-100 text-xs"
-              @click="openDeleteRoleModal"
+              @click="openDeleteRoleModal(teacher.id)"
             >
               Delete Teacher
             </button>
@@ -218,7 +216,7 @@
         </div>
         <div class="flex flex-col gap-y-1 justify-center items-center w-full">
           <button
-            @click="closeModal"
+            @click="deleteTeacher"
             class="bg-[#EF3333] py-2 w-full text-white rounded-lg Grotesque-Regular"
           >
             Yes, please
@@ -238,7 +236,7 @@
     <Modal v-model="isCreateTeacherModalOpen">
       <div class="flex flex-col gap-y-4 justify-center items-center w-full">
         <h2 class="text-[#1A1A1A] Grotesque-Regular">Create Teacher</h2>
-        <form class="w-full lg:w-[45%] flex flex-col gap-y-4">
+        <div class="w-full lg:w-[45%] flex flex-col gap-y-4">
           <div class="w-full">
             <label class="Grotesque-Regular text-md text-[#010109]"
               >Teacher Name</label
@@ -255,7 +253,7 @@
             >
             <input
               type="text"
-              v-model="editTeacherData.subject"
+              v-model="editTeacherData.subjects"
               class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
             />
           </div>
@@ -270,11 +268,10 @@
             />
           </div>
           <div class="w-full">
-            <label class="Grotesque-Regular text-md text-[#010109]"
-              >Phone</label
-            >
+            <label class="Grotesque-Regular text-md text-[#010109]">id</label>
             <input
               type="text"
+              v-model="editTeacherData.teacher_id"
               class="custom-select w-full bg-[#F9F9FC] border-[1px] h-[50px] px-3 rounded-lg outline-none mb-2 mt-1"
             />
           </div>
@@ -288,12 +285,12 @@
             />
           </div>
           <button
-            @click="closeCreateTeacherModal"
+            @click="submitEditTeacher"
             class="bg-[#0050A8] py-2 w-full text-white rounded-lg"
           >
             {{ isEditMode ? "Update Teacher" : "Create Teacher" }}
           </button>
-        </form>
+        </div>
       </div>
     </Modal>
   </div>
@@ -305,10 +302,11 @@ definePageMeta({
 });
 
 import personImg from "~/assets/img/person.png";
-import personImg2 from "~/assets/img/person2.png";
-import personImg3 from "~/assets/img/person3.png";
 
 import { useAdminStore } from "~/stores/admin";
+import { useToast } from "vue-toastification";
+
+const toast = useToast();
 
 const adminStore = useAdminStore();
 const teachers = ref([]); // Reactive array
@@ -327,13 +325,8 @@ onMounted(async () => {
 });
 
 const isEditMode = ref(false);
-const editTeacherData = ref({
-  name: "",
-  subject: "",
-  email: "",
-  phone: "",
-  image: null,
-});
+const editTeacherData = ref({});
+const selectedTeacherId = ref(null);
 
 const isCreateTeacherModalOpen = ref(false);
 const openCreateTeacherModal = () => {
@@ -352,9 +345,10 @@ const closeCreateTeacherModal = () => (isCreateTeacherModalOpen.value = false);
 const dropdownVisible = ref(null);
 
 const isDeleteRoleModalOpen = ref(false);
-const openDeleteRoleModal = () => {
+const openDeleteRoleModal = (teacherId) => {
   isDeleteRoleModalOpen.value = true;
   dropdownVisible.value = null;
+  selectedTeacherId.value = teacherId;
 };
 
 const openEditTeacherModal = (teacher) => {
@@ -380,5 +374,47 @@ onMounted(async () => {
   console.log(adminStore.teachers);
 });
 
-console.log(adminStore.teachers);
+// Compute total number of teachers
+const totalTeachers = computed(() => teachers.value.length);
+
+// Compute total unique classes
+const totalClasses = computed(() => {
+  const classSet = new Set();
+  teachers.value.forEach((teacher) => {
+    let assignedClasses = teacher.classAssigned;
+    if (assignedClasses) {
+      // If classAssigned is a string of JSON array, parse it
+      if (
+        typeof assignedClasses === "string" &&
+        assignedClasses.startsWith("[")
+      ) {
+        assignedClasses = JSON.parse(assignedClasses);
+      }
+      if (Array.isArray(assignedClasses)) {
+        assignedClasses.forEach((cls) => classSet.add(cls));
+      } else if (typeof assignedClasses === "string") {
+        classSet.add(assignedClasses);
+      }
+    }
+  });
+  return classSet.size;
+});
+
+const deleteTeacher = async () => {
+  await adminStore.deleteTeacher(selectedTeacherId.value);
+  isDeleteRoleModalOpen.value = false;
+
+  toast.success("teacher deleted succesfully");
+  closeModal();
+};
+
+// Submit Edit Teacher
+const submitEditTeacher = async () => {
+  const result = await adminStore.editTeacher(editTeacherData.value);
+  isCreateTeacherModalOpen.value = false;
+
+  toast.success("teacher updated succesfully");
+
+  closeCreateTeacherModal();
+};
 </script>
