@@ -84,7 +84,7 @@
       >
         <div class="flex-1 text-left">
           <div class="flex w-full justify-start items-center gap-x-3">
-            <img :src="teacher.image" class="w-[28px] rounded-full" lt="" />
+            <img :src="personImg" class="w-[28px] rounded-full" lt="" />
             <p class="text-[#4B4B4B] Grotesque-Regular text-[14px]">
               {{ teacher.name }}
             </p>
@@ -92,7 +92,9 @@
         </div>
         <div class="flex-1 text-left">
           <p class="text-[#4B4B4B] Grotesque-Regular text-[14px]">
-            {{ teacher.subject }}
+            {{
+              teacher.subjects ? JSON.parse(teacher.subjects).join(", ") : "N/A"
+            }}
           </p>
         </div>
         <div class="flex-1 text-center">
@@ -102,7 +104,7 @@
         </div>
         <div class="flex-1 text-center">
           <p class="text-[#4B4B4B] Grotesque-Regular text-[14px]">
-            {{ teacher.id }}
+            {{ teacher.teacher_id }}
           </p>
         </div>
         <div class="flex-1 text-center">
@@ -305,32 +307,24 @@ definePageMeta({
 import personImg from "~/assets/img/person.png";
 import personImg2 from "~/assets/img/person2.png";
 import personImg3 from "~/assets/img/person3.png";
-const teachers = ref([
-  {
-    name: "John Doe",
-    subject: "Math",
-    email: "john@example.com",
-    id: "123-456",
-    status: "Active",
-    image: personImg,
-  },
-  {
-    name: "Jane Smith",
-    subject: "English",
-    email: "jane@example.com",
-    id: "987-654",
-    status: "Inactive",
-    image: personImg2,
-  },
-  {
-    name: "Jane Smith",
-    subject: "English",
-    email: "jane@example.com",
-    id: "987-654",
-    status: "Inactive",
-    image: personImg3,
-  },
-]);
+
+import { useAdminStore } from "~/stores/admin";
+
+const adminStore = useAdminStore();
+const teachers = ref([]); // Reactive array
+
+const fetchTeachers = async () => {
+  await adminStore.getTeachers();
+};
+
+// Watch for changes in the store and update `teachers`
+watchEffect(() => {
+  teachers.value = adminStore.teachers || [];
+});
+
+onMounted(async () => {
+  await fetchTeachers();
+});
 
 const isEditMode = ref(false);
 const editTeacherData = ref({
@@ -376,4 +370,15 @@ const toggleDropdownDelete = (index) => {
 const closeModal = () => {
   isDeleteRoleModalOpen.value = false;
 };
+
+const fetchteachers = async () => {
+  await adminStore.getTeachers();
+};
+
+onMounted(async () => {
+  await fetchteachers();
+  console.log(adminStore.teachers);
+});
+
+console.log(adminStore.teachers);
 </script>

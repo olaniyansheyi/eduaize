@@ -2,68 +2,59 @@
   <div
     class="w-full border-[1px] border-[#F4F4FB] rounded-2xl flex flex-col items-center justify-center my-10 gap-y-5 pb-10"
   >
+    <h1 class="font-bold text-xl me-auto py-2 text-[#010109]">
+      Admin Dashboard
+    </h1>
+
+    <!-- Admin Statistics -->
     <div class="w-full flex justify-between items-start flex-wrap gap-5 mt-4">
       <div
-        class="rounded-xl flex justify-center items-center bg-[#F7F7F7] p-4 w-full sm:w-[47%] sm:gap-x-0 lg:w-[22%]"
+        class="rounded-xl flex justify-center items-center bg-[#F7F7F7] p-4 w-full sm:w-[47%] lg:w-[22%]"
       >
-        <div class="flex justify-center items-center flex-col gap-y-1 mx-auto">
-          <p class="text-[#010109] text-lg font-bold">1,200</p>
-          <h3 class="Grotesque-Regular text-[#737373] text-sm text-center">
-            Toatal sudent
-          </h3>
+        <div class="flex flex-col gap-y-1 mx-auto text-center">
+          <p class="text-[#010109] text-lg font-bold">{{ totalStudents }}</p>
+          <h3 class="text-[#737373] text-sm">Total Students</h3>
         </div>
       </div>
+
       <div
-        class="rounded-xl py flex justify-center items-start gap-x-2 bg-[#F7F7F7] p-4 w-full sm:w-[47%] sm:gap-x-0 lg:w-[22%]"
+        class="rounded-xl flex justify-center items-center bg-[#F7F7F7] p-4 w-full sm:w-[47%] lg:w-[22%]"
       >
-        <div class="flex justify-center items-center flex-col gap-y-1 mx-auto">
-          <p class="text-red-500 text-lg font-bold">54</p>
-          <h3
-            class="me-auto Grotesque-Regular text-[#737373] text-sm whitespace-nowrap"
-          >
-            Toatal Student At Risk
-          </h3>
+        <div class="flex flex-col gap-y-1 mx-auto text-center">
+          <p class="text-red-500 text-lg font-bold">{{ studentsAtRisk }}</p>
+          <h3 class="text-[#737373] text-sm">Total Students At Risk</h3>
         </div>
       </div>
+
       <div
-        class="rounded-xl py flex justify-center items-center gap-x-2 bg-[#F7F7F7] p-4 w-full sm:w-[47%] sm:gap-x-0 lg:w-[22%]"
+        class="rounded-xl flex justify-center items-center bg-[#F7F7F7] p-4 w-full sm:w-[47%] lg:w-[22%]"
       >
-        <div class="flex justify-center items-center flex-col gap-y-1">
-          <p class="text-[#010109] text-lg font-bold">80</p>
-          <h3 class="me-auto Grotesque-Regular text-[#737373] text-sm">
-            Toatal Teachers
-          </h3>
+        <div class="flex flex-col gap-y-1 text-center">
+          <p class="text-[#010109] text-lg font-bold">{{ totalTeachers }}</p>
+          <h3 class="text-[#737373] text-sm">Total Teachers</h3>
         </div>
       </div>
+
       <div
-        class="rounded-xl py flex justify-center items-center gap-x-2 bg-[#F7F7F7] p-4 w-full sm:w-[47%] sm:gap-x-0 lg:w-[22%]"
+        class="rounded-xl flex justify-center items-center bg-[#F7F7F7] p-4 w-full sm:w-[47%] lg:w-[22%]"
       >
-        <div class="flex justify-center items-center flex-col gap-y-1 mx-auto">
-          <p class="text-[#010109] text-lg font-bold">1,000</p>
-          <h3
-            class="me-auto Grotesque-Regular text-[#737373] text-sm font-bold"
-          >
-            Toatal Parent
-          </h3>
+        <div class="flex flex-col gap-y-1 mx-auto text-center">
+          <p class="text-[#010109] text-lg font-bold">{{ totalParents }}</p>
+          <h3 class="text-[#737373] text-sm font-bold">Total Parents</h3>
         </div>
       </div>
     </div>
 
+    <!-- Student Analytics Chart -->
     <div class="w-full mt-10 flex justify-between items-center">
-      <div>
-        <h3 class="Grotesque-Regular text-md text-[#010109]">
-          school-wide student analytics.
-        </h3>
-      </div>
+      <h3 class="text-md text-[#010109]">School-wide Student Analytics</h3>
       <NuxtLink
         to="/admin/export-report"
-        class="bg-[#0050A8] text-white whitespace-nowrap text-xs px-2 md:px-8 rounded-lg py-3 md:text-md"
+        class="bg-[#0050A8] text-white text-xs px-2 md:px-8 rounded-lg py-3 md:text-md"
       >
         Export Report
       </NuxtLink>
     </div>
-
-    <!-- student performance chart -->
 
     <div class="w-full mt-5">
       <PerformanceChart :chartData="chartData" :chartOptions="chartOptions" />
@@ -79,17 +70,63 @@
 </template>
 
 <script setup>
+import { useStudentStore } from "~/stores/student";
+
+const studentStore = useStudentStore();
+
+// Compute total students
+const totalStudents = computed(() => studentStore.students.length);
+
+// Compute students at risk (average below threshold, e.g., 25)
+const studentsAtRisk = computed(() => {
+  return studentStore.students.filter((student) => {
+    let totalAverage = 0;
+    let subjectCount = 0;
+
+    for (const subject in student.subjects) {
+      if (student.subjects[subject].average_term_1 !== undefined) {
+        totalAverage += student.subjects[subject].average_term_1;
+        subjectCount++;
+      }
+      if (student.subjects[subject].average_term_2 !== undefined) {
+        totalAverage += student.subjects[subject].average_term_2;
+        subjectCount++;
+      }
+    }
+
+    return subjectCount > 0 && totalAverage / subjectCount < 25;
+  }).length;
+});
+
+// Aggregate student performance for the chart
+const weeklyPerformance = computed(() => {
+  const weeks = [0, 0, 0, 0, 0];
+  let studentCount = 0;
+
+  studentStore.students.forEach((student) => {
+    Object.values(student.subjects).forEach((subject) => {
+      const scores = subject.term_1_scores || [];
+      for (let i = 0; i < scores.length && i < weeks.length; i++) {
+        weeks[i] += scores[i];
+      }
+    });
+    studentCount++;
+  });
+
+  return weeks.map((score) => (studentCount > 0 ? score / studentCount : 0));
+});
+
 const chartData = ref({
   labels: ["Week 1", "Week 2", "Week 3", "Week 4", "Week 5"],
   datasets: [
     {
       label: "Student Performance",
-      data: [20, 75, 80, 98, 85], // Example weekly performance scores
-      borderColor: "#0050A8", // Blue color
-      backgroundColor: "rgba(0, 80, 168, 0.2)", // Light transparent blue
+      data: weeklyPerformance.value,
+      borderColor: "#0050A8",
+      backgroundColor: "rgba(0, 80, 168, 0.2)",
       borderWidth: 2,
       pointBackgroundColor: "#0050A8",
-      tension: 0.4, // Smooth line
+      tension: 0.4,
     },
   ],
 });
@@ -104,14 +141,14 @@ const chartOptions = ref({
     y: {
       beginAtZero: true,
       grid: { display: false },
-      ticks: {
-        stepSize: 10,
-        padding: 15,
-      },
+      ticks: { stepSize: 10, padding: 15 },
     },
   },
 });
 
+const totalTeachers = computed(() => Math.ceil(totalStudents.value / 15));
+
+const totalParents = computed(() => totalStudents.value * 2);
 definePageMeta({
   layout: "admin",
   middleware: "auth",
