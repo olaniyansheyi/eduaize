@@ -2,7 +2,7 @@
   <div
     class="w-full border-[1px] border-[#F4F4FB] rounded-2xl flex flex-col items-center justify-center my-10 gap-y-5 pb-10"
   >
-    <h1 class="font-bold text-xl me-auto py-2 text-[#010109]">
+    <h1 class="font-bold text-xl me-auto py-2 text-[#010109] flex sm:hidden">
       Admin Dashboard
     </h1>
 
