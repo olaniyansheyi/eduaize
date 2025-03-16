@@ -56,16 +56,6 @@
             This Grade will be recorded for the current term
           </p>
         </div>
-
-        <!-- ✅ Updated: Call uploadStudentData on click -->
-        <!-- <button
-          @click="uploadStudentData"
-          :disabled="isLoading"
-          class="bg-[#0050A8] text-white whitespace-nowrap text-xs px-3 md:px-8 rounded-lg py-3 md:text-md"
-        >
-          <span v-if="!isLoading">Save and Publish</span>
-          <span v-else>Saving...</span>
-        </button> -->
       </div>
 
       <div>
@@ -157,21 +147,22 @@
                   </span>
                 </div>
               </div>
+              <button
+                class="bg-[#0050A8] text-white px-5 py-2 rounded-lg text-sm mt-6"
+                @click="createStudent"
+                :disabled="isLoading"
+              >
+                {{ isLoading ? "Saving..." : "Update" }}
+              </button>
             </div>
           </div>
         </div>
-
-        <button @click="createStudent" :disabled="isLoading">
-          {{ isLoading ? "Saving..." : "Save Scores" }}
-        </button>
       </div>
     </div>
     <!-- upload in bulk -->
 
     <div v-if="selectedTab === 'bulk'">
       <div
-        v-if="selectedTab === 'bulk'"
-        `
         class="w-full border-[1px] border-[#F4F4FB] rounded-2xl px-8 flex flex-col items-center justify-center mt-10 gap-y-5 pb-10"
       >
         <div class="w-full mt-8 mb-4 flex justify-between gap-x-2 items-center">
@@ -245,6 +236,9 @@
 import { useStudentStore } from "~/stores/student";
 import { useToast } from "vue-toastification";
 
+const toast = useToast();
+const studentStore = useStudentStore();
+
 const selectedTab = ref("individual");
 const termWeeks = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 
@@ -287,13 +281,9 @@ const uploadFiles = () => {
   selectedFiles.value = [];
 };
 
-const toast = useToast();
-const studentStore = useStudentStore();
-
-// ✅ Function to upload student data
-const uploadStudentData = async () => {
+const createStudent = async () => {
   if (!selectedStudentId.value) {
-    toast.error("Please enter a valid Student ID.");
+    toast.error("Please enter a Student ID");
     return;
   }
 
@@ -304,73 +294,14 @@ const uploadStudentData = async () => {
 
   isLoading.value = true;
 
-  // ✅ Format student scores for term_3_scores
-  const formattedScores = {};
-  for (const subject in studentScores.value) {
-    formattedScores[subject] = {
-      term_3_scores: [parseFloat(studentScores.value[subject]) || 0], // Convert to number
-    };
-  }
+  await studentStore.createStudentScore(
+    selectedStudentId.value,
+    studentScores.value,
+    remark.value
+  );
 
-  // ✅ Include attendance (/12)
-  formattedScores["attendance"] = {
-    term_3_scores: [`${selectedWeeks.value.length}/12`],
-  };
-
-  // ✅ Call the function in the store
-  try {
-    await studentStore.createStudentScore(
-      selectedStudentId.value,
-      formattedScores
-    );
-    toast.success("Scores updated successfully!");
-  } catch (error) {
-    toast.error("Error updating scores.");
-    console.error(error);
-  } finally {
-    isLoading.value = false;
-  }
-};
-
-const createStudent = async () => {
-  try {
-    isLoading.value = true;
-
-    const newStudent = {
-      student_details: {
-        studentId: selectedStudentId.value,
-      },
-      subjects: {},
-      attendance: {
-        term_3: selectedWeeks.value.length,
-      },
-      teacher_remark: {
-        term_3: remark.value,
-      },
-      created_at: new Date().toISOString(),
-    };
-
-    // Assign subject scores
-    for (const subject of [
-      "Math",
-      "English",
-      "Physics",
-      "History",
-      "Biology",
-    ]) {
-      newStudent.subjects[subject] = {
-        term_3_scores: [parseFloat(studentScores.value[subject]) || 0],
-      };
-    }
-
-    await studentStore.createStudentScore(newStudent, selectedStudentId.value);
-    toast.success("Student scores saved successfully!");
-  } catch (error) {
-    toast.error("Error saving scores.");
-    console.error("Error:", error);
-  } finally {
-    isLoading.value = false;
-  }
+  isLoading.value = false;
+  toast.success("Student scores updated successfully!");
 };
 </script>
 
