@@ -84,7 +84,11 @@
       >
         <div class="flex-1 text-left">
           <div class="flex w-full justify-start items-center gap-x-3">
-            <img :src="personImg" class="w-[28px] rounded-full" lt="" />
+            <img
+              :src="teacher.avatar_url"
+              class="w-[28px] rounded-full"
+              lt=""
+            />
             <p class="text-[#4B4B4B] Grotesque-Regular text-[14px]">
               {{ teacher.name }}
             </p>

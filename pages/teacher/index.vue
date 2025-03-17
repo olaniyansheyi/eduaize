@@ -13,7 +13,11 @@
         <div
           class="w-full flex justify-start items-start lg:gap-x-12 gap-x-5 lg:flex-nowrap flex-wrap gap-y-4"
         >
-          <img :src="personImg" class="w-[80px] h-[80px] rounded-full" alt="" />
+          <img
+            src="https://yofojofubmdgzqismhzq.supabase.co/storage/v1/object/public/avatar//img-3.jpg"
+            class="w-[80px] h-[80px] rounded-full"
+            alt=""
+          />
           <div class="h-full flex justify-start items-start flex-col gap-y-2">
             <h3 class="me-auto Grotesque-Regular text-md text-[#010109]">
               {{ userDetails.fullName }}
@@ -178,7 +182,7 @@
 <script setup>
 // temporal data for the roles
 
-import personImg from "~/assets/img/person.png";
+
 
 import { useStudentStore } from "~/stores/student";
 
@@ -220,6 +224,7 @@ const loadUserFromLocalStorage = () => {
 // Fetch user data when component mounts
 onMounted(() => {
   loadUserFromLocalStorage();
+  console.log(userDetails);
 });
 
 const isOpen = ref(false);

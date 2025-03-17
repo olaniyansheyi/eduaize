@@ -86,11 +86,7 @@
       >
         <div class="flex-1 my-3 text-left">
           <div class="flex w-full justify-start items-center gap-x-3">
-            <img
-              src="~/assets/img/person.png"
-              class="w-[28px] rounded-full"
-              lt=""
-            />
+            <img :src="student.image" class="w-[28px] rounded-full" lt="" />
             <p class="text-[#4B4B4B] Grotesque-Regular text-[14px]">
               {{ student.name }}
             </p>
@@ -415,7 +411,7 @@ const students = computed(() => {
       average: totalAverage.toFixed(2),
       grade: getGrade(totalAverage),
       status: totalAverage >= 40 ? "Pass" : "Fail",
-      image: student.image || "~/assets/img/person.png",
+      image: student.avatar_url,
       id: student.id,
     };
   });

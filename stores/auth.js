@@ -9,7 +9,7 @@ export const useAuthStore = defineStore("auth", {
     userDetails: null,
   }),
   actions: {
-    async signup({ fullName, email, password, address, id, role }) {
+    async signup({ fullName, email, password, address, id, role, avatar }) {
       const { $supabase } = useNuxtApp();
       this.loading = true;
       this.error = null;
@@ -19,7 +19,7 @@ export const useAuthStore = defineStore("auth", {
           email,
           password,
           options: {
-            data: { fullName, address, id, role },
+            data: { fullName, address, id, role, avatar },
           },
         });
         const { data, error } = response;
