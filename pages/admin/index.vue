@@ -74,6 +74,10 @@ import { useStudentStore } from "~/stores/student";
 
 const studentStore = useStudentStore();
 
+onMounted(() => {
+  studentStore.analyzeAllStudentsRisk();
+});
+
 // Compute total students
 const totalStudents = computed(() => studentStore.students.length);
 

@@ -1,9 +1,11 @@
 import { defineStore } from "pinia";
+import { analyzeStudentRisk } from "~/services/aiServices";
 
 export const useStudentStore = defineStore("student", {
   // Data
   state: () => ({
     students: [],
+    studentsAtRisk: [],
   }),
   actions: {
     async getStudents() {
@@ -169,6 +171,28 @@ export const useStudentStore = defineStore("student", {
         console.log("Student scores updated successfully!");
       } catch (error) {
         console.error("Unexpected error:", error);
+      }
+    },
+
+    async analyzeAllStudentsRisk() {
+      try {
+        await this.getStudents();
+
+        let atRiskStudents = [];
+
+        // Analyze each student
+        for (const student of this.students) {
+          const riskLevel = await analyzeStudentRisk(student);
+
+          if (riskLevel && riskLevel.toLowerCase() === "high") {
+            atRiskStudents.push(student);
+          }
+        }
+        // Update state with students at risk
+        this.studentsAtRisk = atRiskStudents;
+        console.log("At-risk students:", atRiskStudents);
+      } catch (error) {
+        console.error("Error analyzing all students:", error);
       }
     },
   },
