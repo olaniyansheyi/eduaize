@@ -57,7 +57,7 @@
             v-for="option in options"
             :key="option"
             class="px-3 py-2 hover:bg-[#F9F9FC] cursor-pointer"
-            @click="selectOption(option)"
+            @click.stop="selectOption(option)"
           >
             {{ option }}
           </li>
@@ -67,7 +67,7 @@
 
     <!-- Table -->
     <div
-      class="flex flex-col w-full overflow-x-auto overflow-y-auto max-w-full h-[331px]"
+      class="flex flex-col w-full overflow-x-auto overflow-y-auto max-w-full"
     >
       <!-- Header -->
       <div
@@ -92,7 +92,7 @@
 
       <!-- Data Rows -->
       <div
-        v-for="(report, index) in reports"
+        v-for="(report, index) in filteredReports"
         :key="index"
         class="flex justify-between border-b items-center border-b-[#E9E5E5] w-[1000px] h-[68px] px-5 relative"
       >
@@ -122,103 +122,27 @@
             {{ report.ai_insights }}
           </p>
         </div>
-        <div class="w-[5%] text-center cursor-pointer relative">
+        <NuxtLink
+          :to="`/student/${report.id}`"
+          class="w-[5%] text-center cursor-pointer relative"
+        >
           <button
             class="bg-[#0050AB] rounded-lg px-4 py-1 cursor-pointer text-white text-xs"
           >
             View
           </button>
-        </div>
+        </NuxtLink>
       </div>
-    </div>
-
-    <!-- Pagination  -->
-    <div class="w-full justify-between flex flex-wrap items-center gap-y-5">
-      <div class="flex justify-center items-center gap-x-4">
-        <p class="text-[#737373] Grotesque-Regular text-[14px]">
-          Rows per page
-        </p>
-        <select
-          class="w-[64px] h-[32px] border-[1px] border-[#E9E5E5] rounded-lg outline-none px-1 cursor-pointer text-[#737373] Grotesque-Regular text-[14px]"
-        >
-          <option value="10">10</option>
-          <option value="20">20</option>
-          <option value="30">30</option>
-        </select>
-      </div>
-
-      <div class="flex justify-start items-center gap-x-1 flex-wrap gap-y-5">
-        <button
-          class="border-[1px] border-[#E9E5E5] rounded-lg px-4 py-1 cursor-pointer"
-        >
-          First
-        </button>
-        <button
-          class="border-[1px] border-[#E9E5E5] rounded-lg px-4 py-1 cursor-pointer"
-        >
-          Previous
-        </button>
-        <button
-          class="border-[1px] border-[#E9E5E5] rounded-lg px-4 py-1 cursor-pointer"
-        >
-          1
-        </button>
-        <button
-          class="bg-[#0050AB] rounded-lg px-4 py-1 cursor-pointer text-white"
-        >
-          2
-        </button>
-        <button
-          class="border-[1px] border-[#E9E5E5] rounded-lg px-4 py-1 cursor-pointer"
-        >
-          ....
-        </button>
-        <button
-          class="border-[1px] border-[#E9E5E5] rounded-lg px-4 py-1 cursor-pointer"
-        >
-          Next
-        </button>
-        <button
-          class="border-[1px] border-[#E9E5E5] rounded-lg px-4 py-1 cursor-pointer"
-        >
-          Last
-        </button>
-        <p class="text-[#737373] Grotesque-Regular text-[14px] lg:ms-2">
-          1-10 of 346 Results
-        </p>
-      </div>
-
-      <!-- Export Button -->
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { useStudentStore } from "~/stores/student";
 
-const reports = ref([
-  {
-    id: 1,
-    student_name: "John Doe",
-    term: "Term 1",
-    risk_level: "High",
-    ai_insights: "Low math performance detected.",
-  },
-  {
-    id: 2,
-    student_name: "Alice Johnson",
-    term: "Term 1",
-    risk_level: "Medium",
-    ai_insights: "Average engagement.",
-  },
-  {
-    id: 3,
-    student_name: "Michael Smith",
-    term: "Term 1",
-    risk_level: "Low",
-    ai_insights: "Excellent performance!",
-  },
-]);
+const studentStore = useStudentStore();
+
+const reports = computed(() => studentStore.studentsAtRiskComputed);
 
 // CSV Export Function
 
@@ -244,16 +168,10 @@ const exportData = () => {
   link.click();
 };
 
-const selectedOption = ref("all");
-const options = ref(["pass", "fail", "Top student", "all"]);
+const options = ref(["low", "normal", "high", "all"]);
 
 const toggleDropdown = () => {
   isOpen.value = !isOpen.value;
-};
-
-const selectOption = (option) => {
-  selectedOption.value = option;
-  isOpen.value = false;
 };
 
 const dropdownVisible = ref(null);
@@ -261,4 +179,24 @@ const isOpen = ref(false);
 definePageMeta({
   layout: "admin",
 });
+
+const studentAtRisk = ref([]);
+
+studentAtRisk.value = studentStore.studentsAtRiskComputed;
+
+const selectedOption = ref("all");
+
+const filteredReports = computed(() => {
+  if (selectedOption.value === "all") {
+    return reports.value;
+  }
+  return reports.value.filter(
+    (report) => report.risk_level.toLowerCase() === selectedOption.value
+  );
+});
+
+const selectOption = (option) => {
+  selectedOption.value = option;
+  isOpen.value = false;
+};
 </script>

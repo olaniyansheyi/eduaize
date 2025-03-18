@@ -13,7 +13,7 @@
         class="w-full flex justify-start items-start lg:gap-x-12 gap-x-5 lg:flex-nowrap flex-wrap gap-y-4"
       >
         <img
-          :src="personImg"
+          :src="student?.avatar_url"
           class="w-[80px] h-[80px] rounded-full"
           alt="Student Image"
         />
@@ -147,8 +147,6 @@
 </template>
 
 <script setup>
-import personImg from "~/assets/img/person.png";
-// import { useRoute } from "vue-router";
 import { useStudentStore } from "~/stores/student";
 
 const route = useRoute();

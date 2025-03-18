@@ -21,7 +21,9 @@
         class="rounded-xl flex justify-center items-center bg-[#F7F7F7] p-4 w-full sm:w-[47%] lg:w-[22%]"
       >
         <div class="flex flex-col gap-y-1 mx-auto text-center">
-          <p class="text-red-500 text-lg font-bold">{{ studentsAtRisk }}</p>
+          <p class="text-red-500 text-lg font-bold">
+            {{ studentAtRisk.length }}
+          </p>
           <h3 class="text-[#737373] text-sm">Total Students At Risk</h3>
         </div>
       </div>
@@ -74,33 +76,12 @@ import { useStudentStore } from "~/stores/student";
 
 const studentStore = useStudentStore();
 
-onMounted(() => {
-  studentStore.analyzeAllStudentsRisk();
-});
+const studentAtRisk = ref([]);
+
+studentAtRisk.value = studentStore.studentsAtRiskComputed;
 
 // Compute total students
 const totalStudents = computed(() => studentStore.students.length);
-
-// Compute students at risk (average below threshold, e.g., 25)
-const studentsAtRisk = computed(() => {
-  return studentStore.students.filter((student) => {
-    let totalAverage = 0;
-    let subjectCount = 0;
-
-    for (const subject in student.subjects) {
-      if (student.subjects[subject].average_term_1 !== undefined) {
-        totalAverage += student.subjects[subject].average_term_1;
-        subjectCount++;
-      }
-      if (student.subjects[subject].average_term_2 !== undefined) {
-        totalAverage += student.subjects[subject].average_term_2;
-        subjectCount++;
-      }
-    }
-
-    return subjectCount > 0 && totalAverage / subjectCount < 25;
-  }).length;
-});
 
 // Aggregate student performance for the chart
 const weeklyPerformance = computed(() => {

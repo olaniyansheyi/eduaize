@@ -57,26 +57,7 @@ const studentStore = useStudentStore();
 const totalStudents = computed(() => studentStore.students.length);
 
 // Compute students at risk (average below threshold, e.g., 25)
-const studentsAtRisk = computed(() => {
-  return studentStore.students.filter((student) => {
-    let totalAverage = 0;
-    let subjectCount = 0;
-
-    for (const subject in student.subjects) {
-      if (student.subjects[subject].average_term_1 !== undefined) {
-        totalAverage += student.subjects[subject].average_term_1;
-        subjectCount++;
-      }
-      if (student.subjects[subject].average_term_2 !== undefined) {
-        totalAverage += student.subjects[subject].average_term_2;
-        subjectCount++;
-      }
-    }
-
-    return subjectCount > 0 && totalAverage / subjectCount < 25;
-  }).length;
-});
-
+const studentsAtRisk = studentStore.studentsAtRiskComputed.length;
 // Aggregate student performance for the chart
 const weeklyPerformance = computed(() => {
   const weeks = [0, 0, 0, 0, 0];

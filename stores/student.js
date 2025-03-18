@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { analyzeStudentRisk } from "~/services/aiServices";
+// import { analyzeStudentRisk } from "~/services/aiServices";
 
 export const useStudentStore = defineStore("student", {
   // Data
@@ -173,27 +173,69 @@ export const useStudentStore = defineStore("student", {
         console.error("Unexpected error:", error);
       }
     },
+  },
 
-    async analyzeAllStudentsRisk() {
-      try {
-        await this.getStudents();
+  getters: {
+    studentsAtRiskComputed: (state) => {
+      return state.students
+        .map((student) => {
+          let totalScore = 0;
+          let subjectCount = 0;
 
-        let atRiskStudents = [];
+          for (const subject in student.subjects) {
+            const subjectData = student.subjects[subject];
 
-        // Analyze each student
-        for (const student of this.students) {
-          const riskLevel = await analyzeStudentRisk(student);
+            // Consider Term 1 and Term 2
+            if (subjectData.term_1_scores) {
+              totalScore += subjectData.term_1_scores.reduce(
+                (a, b) => a + b,
+                0
+              );
+              subjectCount += subjectData.term_1_scores.length;
+            }
 
-          if (riskLevel && riskLevel.toLowerCase() === "high") {
-            atRiskStudents.push(student);
+            if (subjectData.term_2_scores) {
+              totalScore += subjectData.term_2_scores.reduce(
+                (a, b) => a + b,
+                0
+              );
+              subjectCount += subjectData.term_2_scores.length;
+            }
+
+            // Optional: Include Term 3 if available
+            if (
+              subjectData.term_3_scores &&
+              subjectData.term_3_scores.length > 0
+            ) {
+              totalScore += subjectData.term_3_scores.reduce(
+                (a, b) => a + b,
+                0
+              );
+              subjectCount += subjectData.term_3_scores.length;
+            }
           }
-        }
-        // Update state with students at risk
-        this.studentsAtRisk = atRiskStudents;
-        console.log("At-risk students:", atRiskStudents);
-      } catch (error) {
-        console.error("Error analyzing all students:", error);
-      }
+
+          const averageScore = subjectCount > 0 ? totalScore / subjectCount : 0;
+
+          // Determine risk level
+          let riskLevel = "Low";
+          if (averageScore < 40) riskLevel = "High";
+          else if (averageScore < 60) riskLevel = "Medium";
+
+          return averageScore < 60
+            ? {
+                id: student.id, // Real student ID from the database
+                student_name: student.student_details.name,
+                term: "Term 1 & Term 2", // Indicates the terms used
+                risk_level: riskLevel,
+                ai_insights:
+                  averageScore < 40
+                    ? "Critical performance drop."
+                    : "Needs improvement.",
+              }
+            : null;
+        })
+        .filter(Boolean);
     },
   },
 });
