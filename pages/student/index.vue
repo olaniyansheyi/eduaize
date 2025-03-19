@@ -226,6 +226,10 @@ definePageMeta({
 
 import { useStudentStore } from "~/stores/student";
 
+import { getAIInsights } from "~/services/aiServices";
+
+const config = useRuntimeConfig();
+
 const studentStore = useStudentStore();
 
 const isOpen = ref(false);
@@ -312,7 +316,7 @@ watch(
   async (newId) => {
     if (newId) {
       student.value = await studentStore.getStudent(newId);
-      console.log(student.value);
+      // console.log(student.value);
     }
   },
   { immediate: true }
@@ -331,6 +335,30 @@ watch(
   (newStudent) => {
     if (newStudent?.subjects) {
       updateStudentData(selectedTerm.value); // Initialize with Term 1
+    }
+  },
+  { immediate: true, deep: true }
+);
+
+watch(
+  () => student.value,
+  async (newStudent) => {
+    if (newStudent?.id) {
+      const aiData = await getAIInsights(
+        newStudent,
+        config.public.openaiApiKey
+      );
+
+      console.log(aiData);
+      try {
+        // const aiResponse = JSON.parse(aiData);
+        // aiInsights.value = aiResponse.insight;
+        // studyRecommendations.value = aiResponse.studyFocus;
+        // motivationalMessage.value = aiResponse.motivation;
+        // progressInsight.value = aiResponse.progressInsight;
+      } catch (error) {
+        console.error("Error parsing AI response:", error);
+      }
     }
   },
   { immediate: true, deep: true }
