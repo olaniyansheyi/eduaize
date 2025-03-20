@@ -340,10 +340,38 @@ watch(
   { immediate: true, deep: true }
 );
 
+// watch(
+//   () => student.value,
+//   async (newStudent) => {
+//     if (newStudent?.id) {
+//       const aiData = await getAIInsights(
+//         newStudent,
+//         config.public.openaiApiKey
+//       );
+
+//       console.log(aiData);
+//       try {
+//         // const aiResponse = JSON.parse(aiData);
+//         // aiInsights.value = aiResponse.insight;
+//         // studyRecommendations.value = aiResponse.studyFocus;
+//         // motivationalMessage.value = aiResponse.motivation;
+//         // progressInsight.value = aiResponse.progressInsight;
+//         // studyPlan.value = aiData.studyPlan;
+//       } catch (error) {
+//         console.error("Error parsing AI response:", error);
+//       }
+//     }
+//   },
+//   { immediate: true, deep: true }
+// );
+
 watch(
   () => student.value,
   async (newStudent) => {
     if (newStudent?.id) {
+      // Add a delay before making the API request
+      await new Promise((resolve) => setTimeout(resolve, 2000)); // 2-second delay
+
       const aiData = await getAIInsights(
         newStudent,
         config.public.openaiApiKey
@@ -356,6 +384,7 @@ watch(
         // studyRecommendations.value = aiResponse.studyFocus;
         // motivationalMessage.value = aiResponse.motivation;
         // progressInsight.value = aiResponse.progressInsight;
+        // studyPlan.value = aiData.studyPlan;
       } catch (error) {
         console.error("Error parsing AI response:", error);
       }

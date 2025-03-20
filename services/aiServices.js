@@ -13,15 +13,26 @@ export async function getAIInsights(student, $openaiApiKey) {
     - Suggest study focus areas.
     - Provide a motivational message.
     - Offer a brief progress insight.
-    
-    Keep responses short and concise.`;
+    - Generate a personalized 7-day study plan based on their weaknesses.
+
+    Return the response in JSON format with the following structure:
+    {
+      "insight": "Short AI insight",
+      "studyFocus": ["Topic 1", "Topic 2"],
+      "motivation": "Motivational message",
+      "progressInsight": "Brief progress insight",
+      "studyPlan": [
+        { "day": "Monday", "subject": "Math", "topic": "Algebra Equations" },
+        { "day": "Tuesday", "subject": "English", "topic": "Essay Writing" }
+      ]
+    }`;
 
     const response = await axios.post(
       OPENAI_URL,
       {
         model: "gpt-4o-mini",
         messages: [{ role: "system", content: prompt }],
-        max_tokens: 300,
+        max_tokens: 500,
       },
       {
         headers: {
@@ -31,7 +42,8 @@ export async function getAIInsights(student, $openaiApiKey) {
       }
     );
 
-    return response.data.choices[0].message.content;
+    // Ensure response is parsed correctly
+    return JSON.parse(response.data.choices[0].message.content);
   } catch (error) {
     console.error("Error fetching AI insights:", error);
     return {
@@ -39,6 +51,7 @@ export async function getAIInsights(student, $openaiApiKey) {
       studyFocus: [],
       motivation: "Keep pushing forward! Your hard work will pay off!",
       progressInsight: "No progress data available.",
+      studyPlan: [],
     };
   }
 }
