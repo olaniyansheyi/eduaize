@@ -182,8 +182,6 @@
 <script setup>
 // temporal data for the roles
 
-
-
 import { useStudentStore } from "~/stores/student";
 
 const studentStore = useStudentStore();
@@ -224,7 +222,6 @@ const loadUserFromLocalStorage = () => {
 // Fetch user data when component mounts
 onMounted(() => {
   loadUserFromLocalStorage();
-  console.log(userDetails);
 });
 
 const isOpen = ref(false);

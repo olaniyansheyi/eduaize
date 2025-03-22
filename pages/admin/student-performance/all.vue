@@ -56,7 +56,6 @@ const studentStore = useStudentStore();
 // Compute total students
 const totalStudents = computed(() => studentStore.students.length);
 
-// Compute students at risk (average below threshold, e.g., 25)
 const studentsAtRisk = studentStore.studentsAtRiskComputed.length;
 // Aggregate student performance for the chart
 const weeklyPerformance = computed(() => {

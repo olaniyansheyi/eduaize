@@ -74,6 +74,8 @@ definePageMeta({
   middleware: "auth",
 });
 
+const studentsAtRisk = studentStore.studentsAtRiskComputed.length;
+
 const isOpenFilterChart = ref(false);
 
 const options = ref(["Term 1", "Term 2"]);
@@ -174,10 +176,4 @@ const chartOptionsPie = ref({
     legend: { position: "bottom" },
   },
 });
-
-const fetchStudents = async () => {
-  isLoading.value = true;
-  await studentStore.getStudents();
-  isLoading.value = false;
-};
 </script>

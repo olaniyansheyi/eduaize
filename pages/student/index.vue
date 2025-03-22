@@ -349,16 +349,19 @@ watch(
         config.public.openaiApiKey
       );
 
-      console.log(aiData);
       try {
-        // const aiResponse = JSON.parse(aiData);
-        // aiInsights.value = aiResponse.insight;
-        // studyRecommendations.value = aiResponse.studyFocus;
-        // motivationalMessage.value = aiResponse.motivation;
-        // progressInsight.value = aiResponse.progressInsight;
-        // studyPlan.value = aiData.studyPlan;
+        console.log("AI Data:", aiData);
+
+        if (typeof aiData === "string") {
+          aiData = JSON.parse(aiData);
+        }
+
+        aiInsights.value = aiData.insight;
+        studyRecommendations.value = aiData.studyFocus;
+        // progressInsight.value = aiData.progressInsight;
+        studyPlan.value = aiData.studyPlan || [];
       } catch (error) {
-        console.error("Error parsing AI response:", error);
+        console.error("Error parsing AI response:", error, aiData);
       }
     }
   },

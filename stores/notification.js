@@ -18,7 +18,6 @@ export const useNotificationStore = defineStore("notification", {
         if (error) {
           console.error("Supabase error:", error);
         } else {
-          console.log("Fetched Notifications:", data);
           this.notifications = data || [];
         }
       } catch (error) {

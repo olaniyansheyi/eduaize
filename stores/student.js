@@ -179,6 +179,7 @@ export const useStudentStore = defineStore("student", {
     studentsAtRiskComputed: (state) => {
       return state.students
         .map((student) => {
+          console.log(student);
           let totalScore = 0;
           let subjectCount = 0;
 
@@ -224,9 +225,11 @@ export const useStudentStore = defineStore("student", {
 
           return averageScore < 60
             ? {
-                id: student.id, // Real student ID from the database
+                avatar: student.avatar_url,
+                id: student.id,
                 student_name: student.student_details.name,
-                term: "Term 1 & Term 2", // Indicates the terms used
+
+                term: "Term 1 & Term 2",
                 risk_level: riskLevel,
                 ai_insights:
                   averageScore < 40

@@ -151,7 +151,6 @@ watch(
   (newId) => {
     if (newId) {
       notificationStore.getNotifications(newId);
-      console.log(notificationStore.notifications);
     }
   },
   { immediate: true }

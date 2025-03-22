@@ -54,7 +54,7 @@
         class="w-full flex justify-start items-start lg:gap-x-12 gap-x-5 lg:flex-nowrap flex-wrap gap-y-4"
       >
         <img
-          src="~/assets/img/person.png"
+          src="https://yofojofubmdgzqismhzq.supabase.co/storage/v1/object/public/avatar//avatar1.png"
           class="w-[80px] h-[80px] rounded-full"
           alt="Student Image"
         />
