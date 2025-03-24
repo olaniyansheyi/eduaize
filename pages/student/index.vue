@@ -322,7 +322,7 @@ watch(
   { immediate: true }
 );
 
-const student = ref({}); // Will be populated asynchronously
+const student = ref({});
 const selectedTerm = ref("term_1"); // Default to Term 1
 const studentStats = ref({});
 const chartDataBar = ref({
@@ -358,6 +358,7 @@ watch(
 
         aiInsights.value = aiData.insight;
         studyRecommendations.value = aiData.studyFocus;
+
         // progressInsight.value = aiData.progressInsight;
         studyPlan.value = aiData.studyPlan || [];
       } catch (error) {

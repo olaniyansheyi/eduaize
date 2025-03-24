@@ -60,7 +60,7 @@
       <h2 class="text-md font-semibold text-[#0050A8] mb-3">
         AI Motivational Message
       </h2>
-      <p class="text-gray-700 italic">"{{ motivationalMessage }}"</p>
+      <p class="text-gray-700 italic">"{{ motivationalMessages }}"</p>
     </div>
 
     <!-- Study Plan -->
@@ -89,6 +89,55 @@
 </template>
 
 <script setup>
+import { useStudentStore } from "~/stores/student";
+
+import { getAIInsights } from "~/services/aiServices";
+
+const config = useRuntimeConfig();
+
+const studentStore = useStudentStore();
+
+const userDetails = ref({
+  id: "",
+  email: "",
+  address: "",
+  fullName: "",
+});
+
+const loadUserFromLocalStorage = () => {
+  if (process.client) {
+    const storedUser = localStorage.getItem("user");
+
+    if (storedUser) {
+      const userData = JSON.parse(storedUser);
+
+      userDetails.value = {
+        id: userData.id,
+        email: userData.user_metadata?.email || "N/A",
+        address: userData.user_metadata?.address || "N/A",
+        fullName: userData.user_metadata?.fullName || "N/A",
+      };
+    }
+  }
+};
+
+// Fetch user data when component mounts
+onMounted(() => {
+  loadUserFromLocalStorage();
+});
+
+watch(
+  () => userDetails.value.id,
+  async (newId) => {
+    if (newId) {
+      student.value = await studentStore.getStudent(newId);
+      // console.log(student.value);
+    }
+  },
+  { immediate: true }
+);
+
+const student = ref({});
 definePageMeta({
   layout: "student",
 });
@@ -133,16 +182,11 @@ const studyRecommendations = ref([
 ]);
 
 // AI Motivational Messages (Dynamic)
-const motivationalMessages = [
+const motivationalMessages = ref([
   "You're on track for an A! Keep pushing! 🚀",
   "Consistency is key! Just a little more effort! 🎯",
   "You're improving every day. Stay focused! 💡",
-];
-const motivationalMessage = computed(() => {
-  return motivationalMessages[
-    Math.floor(Math.random() * motivationalMessages.length)
-  ];
-});
+]);
 
 // AI Study Plan (Mock Data)
 const studyPlan = ref([
@@ -154,6 +198,33 @@ const studyPlan = ref([
   { day: "Saturday", subject: "Chemistry", topic: "Periodic Table" },
   { day: "Sunday", subject: "Revision", topic: "Past Exam Papers" },
 ]);
+
+watch(
+  () => student.value,
+  async (newStudent) => {
+    if (newStudent?.id) {
+      const aiData = await getAIInsights(
+        newStudent,
+        config.public.openaiApiKey
+      );
+
+      try {
+        console.log("AI Data:", aiData);
+
+        if (typeof aiData === "string") {
+          aiData = JSON.parse(aiData);
+        }
+        studyRecommendations.value = aiData.studyFocus;
+        motivationalMessages.value = aiData.motivation;
+
+        studyPlan.value = aiData.studyPlan || [];
+      } catch (error) {
+        console.error("Error parsing AI response:", error, aiData);
+      }
+    }
+  },
+  { immediate: true, deep: true }
+);
 </script>
 
 <style scoped>
