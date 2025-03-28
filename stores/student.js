@@ -179,7 +179,6 @@ export const useStudentStore = defineStore("student", {
     studentsAtRiskComputed: (state) => {
       return state.students
         .map((student) => {
-          console.log(student);
           let totalScore = 0;
           let subjectCount = 0;
 
